@@ -1,0 +1,23 @@
+<!-- HEADER -->
+<div id="header"><!-- By default there is not header --></div>
+
+<!-- NAVIGATION BAR -->
+<app-navbar id="navbar"></app-navbar>
+
+<!-- MAIN -->
+<div id="main" class="container">
+    <!--  Notification center -->
+    <app-notification-center></app-notification-center>
+    
+    <!-- Placeholder for views (user interfaces) -->
+    <div ng-view></div>
+</div>
+
+<!-- FOOTER -->
+<div id="footer">
+    <div id="ampersand-footer" class="container">
+        <p class="text-muted">This application is developed with <a href="https://github.com/AmpersandTarski/ampersand" target="_blank"><img src="assets/images/ampersand.png"/> Ampersand technology</a>.</p>
+    </div>
+</div>
+
+<router-outlet></router-outlet>
