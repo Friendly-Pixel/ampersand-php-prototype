@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Restangular } from 'ngx-restangular';
 import { LocalStorageService, SessionStorageService } from 'angular-web-storage';
 import { NotificationCenterService } from '../notification-center/notification-center.service';
+import { ApiService } from '../api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import { NotificationCenterService } from '../notification-center/notification-c
 export class NavbarService {
 
   constructor(
-    protected restangular: Restangular,
+    protected api: ApiService,
     protected notificationCenter: NotificationCenterService,
     protected localStorage: LocalStorageService,
     protected sessionStorage: SessionStorageService
@@ -45,9 +45,8 @@ export class NavbarService {
 
   protected getNavbarPromise(): Promise<any> {
     if (this.pendingNavbarPromise === null) {
-      this.pendingNavbarPromise = this.restangular
-        .one('app/navbar')
-        .get()
+      this.pendingNavbarPromise = this.api
+        .get('app/navbar')
         .finally(() => {
           this.pendingNavbarPromise = null;
         });

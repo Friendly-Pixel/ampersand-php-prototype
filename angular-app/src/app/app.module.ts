@@ -7,15 +7,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NotificationCenterComponent } from './notification-center/notification-center.component';
 
-import { RestangularModule, Restangular } from 'ngx-restangular';
 import { AngularWebStorageModule } from 'angular-web-storage';
-
-// Function for setting the default restangular configuration
-export function RestangularConfigFactory (RestangularProvider) {
-  RestangularProvider.setBaseUrl('api/v1');
-  RestangularProvider.setDefaultHeaders({'Content-Type': 'application/json'});
-  RestangularProvider.setPlainByDefault(true);
-}
 
 @NgModule({
   declarations: [
@@ -27,8 +19,7 @@ export function RestangularConfigFactory (RestangularProvider) {
     BrowserModule,
     AppRoutingModule,
     AngularWebStorageModule,
-    HttpClientModule,
-    RestangularModule.forRoot(RestangularConfigFactory)
+    HttpClientModule, // import HttpClientModule after BrowserModule.
   ],
   providers: [],
   bootstrap: [AppComponent]
