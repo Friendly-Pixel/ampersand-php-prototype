@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Restangular } from 'ngx-restangular';
+import { LocalStorageService, SessionStorageService } from 'angular-web-storage';
+import { NotificationCenterService } from '../notification-center/notification-center.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NavbarService {
 
-  constructor(private restangular: Restangular) { }
+  constructor(
+    protected restangular: Restangular,
+    protected notificationCenter: NotificationCenterService,
+    protected localStorage: LocalStorageService,
+    protected sessionStorage: SessionStorageService
+  ) { }
 
   public navbar = {
     home: null, // home/start page, can be set in project.yaml (default: '#/prototype/welcome')
@@ -36,12 +43,12 @@ export class NavbarService {
     });
   }
 
-  protected getNavbarPromise() {
+  protected getNavbarPromise(): Promise<any> {
     if (this.pendingNavbarPromise === null) {
       this.pendingNavbarPromise = this.restangular
         .one('app/navbar')
         .get()
-        .finally(function () {
+        .finally(() => {
           this.pendingNavbarPromise = null;
         });
     }
@@ -56,9 +63,9 @@ export class NavbarService {
   public getRouteForHomePage() {
     if (this.navbar.home === null) {
       return this.getNavbarPromise()
-        .then(function (data) {
+        .then((data) => {
           return data.home;
-        }, function (error) {
+        }, error => {
           console.error('Error in getting nav bar data: ', error);
         })
     } else {
@@ -68,19 +75,19 @@ export class NavbarService {
 
   public refreshNavBar() {
     return this.getNavbarPromise()
-      .then(function (data) {
+      .then(data => {
         // Content of navbar
         let hasChildren = function () {
           return this.children.length > 0;
         };
-        let navItems = data.navs.map(function (item) {
+        let navItems = data.navs.map(item => {
           item.hasChildren = hasChildren.bind(item);
           return item;
         });
         let menus = this.treeify(navItems, 'id', 'parent', 'children');
         this.navbar.home = data.home;
 
-        let mainMenu = menus.find(function (menu) {
+        let mainMenu = menus.find(menu => {
           return menu.id === 'MainMenu'
         });
         this.navbar.top = mainMenu === undefined ? [] : mainMenu.children;
@@ -89,21 +96,21 @@ export class NavbarService {
         this.navbar.ext = data.ext;
 
         // Content for session storage
-        $sessionStorage.session = data.session;
-        $sessionStorage.sessionRoles = data.sessionRoles;
-        $sessionStorage.sessionVars = data.sessionVars;
+        this.sessionStorage.set('session', data.session);
+        this.sessionStorage.set('sessionRoles', data.sessionRoles);
+        this.sessionStorage.set('sessionVars', data.sessionVars);
 
         // Save default settings
         this.defaultSettings = data.defaultSettings;
         this.initializeSettings();
 
         // Update notifications
-        NotificationService.updateNotifications(data.notifications);
+        this.notificationCenter.updateNotifications(data.notifications);
 
         this.notifyObservers();
-      }, function (error) {
+      }, error => {
         this.initializeSettings();
-      }).catch(function (error) {
+      }).catch( error => {
         console.error(error);
       });
   }
@@ -112,25 +119,22 @@ export class NavbarService {
     let resetRequired = false;
 
     // Check for undefined settings
-    this.defaultSettings.forEach(function (value, index, obj) {
-      if ($localStorage[index] === undefined) {
+    for (const [key, value] of Object.entries(this.defaultSettings)) {
+      if (this.localStorage.get(key) === null) {
         resetRequired = true;
       }
-    });
+    }
 
     if (resetRequired) this.resetSettingsToDefault();
   }
 
   public resetSettingsToDefault() {
-    // all off
-    this.defaultSettings.forEach(function (value, index, obj) {
-      $localStorage[index] = false;
-    });
+    this.localStorage.clear();
 
-    $timeout(function () {
-      // Reset to default
-      $localStorage.$reset(this.defaultSettings);
-    }, 500);
+    // set
+    for (const [key, value] of Object.entries(this.defaultSettings)) {
+      this.localStorage.set(key, value);
+    }
   }
 
   /**
@@ -151,11 +155,11 @@ export class NavbarService {
     if (!childrenAttr) childrenAttr = 'children';
     var treeList = [];
     var lookup = {};
-    list.forEach(function (obj) {
+    list.forEach(obj => {
       lookup[obj[idAttr]] = obj;
       obj[childrenAttr] = [];
     });
-    list.forEach(function (obj) {
+    list.forEach(obj => {
       if (obj[parentAttr] != null) {
         if (lookup[obj[parentAttr]] === undefined) { // error when parent element is not defined in list
           console.error('Parent element is undefined: ', obj[parentAttr]);
