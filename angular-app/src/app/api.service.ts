@@ -12,7 +12,7 @@ export class ApiService {
     })
   };
 
-  private baseUrl = 'api/v1';
+  private baseUrl = 'http://localhost/Ketenstandaard/public/api/v1';
 
   constructor(private http: HttpClient) { }
 
@@ -32,5 +32,9 @@ export class ApiService {
         });
     });
     return promise;
+  }
+
+  public post(path: string, data: object): Promise<any> {
+    return Promise.resolve();
   }
 }

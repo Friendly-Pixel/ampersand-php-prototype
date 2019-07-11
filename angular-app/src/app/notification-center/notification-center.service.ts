@@ -6,4 +6,12 @@ import { Injectable } from '@angular/core';
 export class NotificationCenterService {
 
   constructor() { }
+
+  public updateNotifications (data) {
+
+  }
+
+  public checkAllRules () {
+    
+  }
 }
