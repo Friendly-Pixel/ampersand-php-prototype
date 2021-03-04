@@ -64,3 +64,5 @@ styling to your application: */
 .nav, .pagination, .carousel, .panel-title a {
     cursor: pointer;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

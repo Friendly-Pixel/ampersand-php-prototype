@@ -9,6 +9,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { NotificationCenterComponent } from './notification-center/notification-center.component';
 
 import { AngularWebStorageModule } from 'angular-web-storage';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AngularWebStorageModule } from 'angular-web-storage';
     FormsModule,
     AppRoutingModule,
     AngularWebStorageModule,
-    HttpClientModule, // import HttpClientModule after BrowserModule.
+    HttpClientModule,
+    NoopAnimationsModule, // import HttpClientModule after BrowserModule.
   ],
   providers: [],
   bootstrap: [AppComponent]
