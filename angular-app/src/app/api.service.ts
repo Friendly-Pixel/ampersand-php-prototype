@@ -12,7 +12,7 @@ export class ApiService {
     })
   };
 
-  private baseUrl = 'http://localhost/Ketenstandaard/public/api/v1';
+  private baseUrl = 'api/v1';
 
   constructor(private http: HttpClient) { }
 

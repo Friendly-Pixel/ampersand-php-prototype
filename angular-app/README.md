@@ -6,6 +6,9 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+We added a proxy for the backend. See [proxy.conf.json](./src/proxy.conf.json) and enabled this in the `serve` section of [angular.json](./angular.json)
+For documentation see: https://angular.io/guide/build#proxying-to-a-backend-server
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
