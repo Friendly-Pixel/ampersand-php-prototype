@@ -11,6 +11,8 @@ import { NotificationCenterComponent } from './notification-center/notification-
 import { AngularWebStorageModule } from 'angular-web-storage';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     AngularWebStorageModule,
     HttpClientModule,
     NoopAnimationsModule, // import HttpClientModule after BrowserModule.
+    MatSlideToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

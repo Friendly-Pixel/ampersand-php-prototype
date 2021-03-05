@@ -24,15 +24,15 @@
                 </a>
                 <ul class="dropdown-menu" role="menu" (click)="$event.stopPropagation();">
                     <li class="dropdown-header">Transaction settings</li>
-                    <li><input [(ngModel)]="notify_showSignals" type="checkbox"/> Show signals</li>
-                    <li><input [(ngModel)]="notify_showInvariants" type="checkbox"/> Show invariants</li>
-                    <li><input [(ngModel)]="autoSave" type="checkbox"/> Auto save changes</li>
+                    <li><mat-slide-toggle [(ngModel)]="notify_showSignals" ngDefaultControl>Show signals</mat-slide-toggle></li>
+                    <li><mat-slide-toggle [(ngModel)]="notify_showInvariants" ngDefaultControl>Show invariants</mat-slide-toggle></li>
+                    <li><mat-slide-toggle [(ngModel)]="autoSave" ngDefaultControl>Auto save changes</mat-slide-toggle></li>
                     <li class="dropdown-header">User logs</li>
-                    <li><input [(ngModel)]="notify_showErrors" type="checkbox"/> Show errors</li>
-                    <li><input [(ngModel)]="notify_showWarnings" type="checkbox"/> Show warnings</li>
-                    <li><input [(ngModel)]="notify_showInfos" type="checkbox"/> Show infos</li>
-                    <li><input [(ngModel)]="notify_showSuccesses" type="checkbox"/> Show successes</li>
-                    <li><input [(ngModel)]="notify_autoHideSuccesses" type="checkbox"/> Auto hide successes</li>
+                    <li><mat-slide-toggle [(ngModel)]="notify_showErrors" ngDefaultControl>Show errors</mat-slide-toggle></li>
+                    <li><mat-slide-toggle [(ngModel)]="notify_showWarnings" ngDefaultControl>Show warnings</mat-slide-toggle></li>
+                    <li><mat-slide-toggle [(ngModel)]="notify_showInfos" ngDefaultControl>Show infos</mat-slide-toggle></li>
+                    <li><mat-slide-toggle [(ngModel)]="notify_showSuccesses" ngDefaultControl>Show successes</mat-slide-toggle></li>
+                    <li><mat-slide-toggle [(ngModel)]="notify_autoHideSuccesses" ngDefaultControl>Auto hide successes</mat-slide-toggle></li>
                     <li class="divider" role="presentation"></li>
                     <li>
                         <a href="" (click)="resetSettingsToDefault();">
