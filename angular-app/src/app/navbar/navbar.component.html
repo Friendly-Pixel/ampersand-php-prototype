@@ -1,9 +1,36 @@
 <mat-toolbar role="navigation">
     <!-- Home -->
-    <a [routerLink]="navbar.home" mat-icon-button>
-        <mat-icon aria-hidden="false">home</mat-icon>
-    </a>
-    <span>My App</span>
+    <button mat-icon-button [routerLink]="navbar.home">
+        <mat-icon>home</mat-icon>
+    </button>
+
+    <span fxShow fxHide.lt-sm="true">My App</span>
+    
+    <!-- Menu < small -->
+    <div fxHide fxShow.lt-sm="true">
+        <button mat-button *ngFor="let item of getMenuItems(1,1)">{{item.label}}</button>
+        <div *ngIf="getMenuItems(2).length > 0" style="display: inline;">
+            <button mat-button [matMenuTriggerFor]="xsMoreMenu">More</button>
+            <mat-menu #xsMoreMenu="matMenu"></mat-menu>
+        </div>
+    </div>
+    <!-- Menu small -->
+    <div fxHide fxShow.sm="true">
+        <button mat-button *ngFor="let item of getMenuItems(1,2)">{{item.label}}</button>
+        <div *ngIf="getMenuItems(3).length > 0" style="display: inline;">
+            <button mat-button [matMenuTriggerFor]="smMoreMenu">More</button>
+            <mat-menu #smMoreMenu="matMenu"></mat-menu>
+        </div>
+    </div>
+    <!-- Menu > small -->
+    <div fxHide fxShow.gt-sm="true">
+        <button mat-button *ngFor="let item of getMenuItems(1,4)">{{item.label}}</button>
+        <div *ngIf="getMenuItems(5).length > 0" style="display: inline;">
+            <button mat-button [matMenuTriggerFor]="mdMoreMenu">More</button>
+            <mat-menu #mdMoreMenu="matMenu"></mat-menu>
+        </div>
+    </div>
+    
     <span class="example-spacer"></span>
     
     <!-- Notifications -->
@@ -61,9 +88,9 @@
         <mat-icon>person</mat-icon>
     </button>
     <mat-menu #roleMenu="matMenu">
-        <!-- <li mat-menu-item *ngFor="let role of sessionRoles" (click)="$event.stopPropagation()">
+        <li mat-menu-item *ngFor="let role of sessionRoles" (click)="$event.stopPropagation()">
             <mat-slide-toggle [(ngModel)]="role.active" (click)="toggleRole(role.id)" ngDefaultControl>{{role.label}}</mat-slide-toggle>
-        </li> -->
+        </li>
         <mat-divider></mat-divider>
         <button mat-menu-item>
             <mat-icon>person</mat-icon>

@@ -11,12 +11,15 @@ import { NotificationCenterComponent } from './notification-center/notification-
 import {NgxWebstorageModule} from 'ngx-webstorage';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -29,13 +32,16 @@ import {MatDividerModule} from '@angular/material/divider';
     FormsModule,
     AppRoutingModule,
     NgxWebstorageModule.forRoot({ prefix: 'app', separator: '.', caseSensitive:true }),
-    HttpClientModule,
-    NoopAnimationsModule, // import HttpClientModule after BrowserModule.
+    HttpClientModule, // import HttpClientModule after BrowserModule.
+    NoopAnimationsModule,
+    FlexLayoutModule,
     MatSlideToggleModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    MatSidenavModule,
+    MatListModule,
     MatDividerModule,
   ],
   providers: [],

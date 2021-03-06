@@ -2,8 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarService } from './navbar.service';
 import { NotificationCenterService } from '../notification-center/notification-center.service';
 import { ApiService } from '../api.service';
-import { LocalStorageService, SessionStorageService, LocalStorage, SessionStorage } from 'ngx-webstorage';
+import { LocalStorage, SessionStorage } from 'ngx-webstorage';
 import { Location } from '@angular/common';
+
+interface NavBar {
+  home: string;
+  top: Array<any>;
+}
 
 @Component({
   selector: 'app-navbar',
@@ -26,14 +31,12 @@ export class NavbarComponent implements OnInit {
 
   public loadingNavBar = [];
 
-  public navbar;
+  public navbar: NavBar;
 
   public resetSettingsToDefault;
   public checkAllRules;
   
   constructor(
-    protected localStorage: LocalStorageService,
-    protected sessionStorage: SessionStorageService,
     protected navbarService: NavbarService,
     protected notificationService: NotificationCenterService,
     protected api: ApiService,
@@ -47,8 +50,10 @@ export class NavbarComponent implements OnInit {
     this.checkAllRules = this.notificationService.checkAllRules;
   }
 
-  // $scope.localStorage = $localStorage;
-  // $scope.sessionStorage = $sessionStorage;
+  public getMenuItems(start : number, end? : number) {
+
+    return this.navbar.top.sort((a, b) => a.seqNr - b.seqNr).slice(start - 1, end);
+  }
 
   // public toggleRole(roleId, set) {
   //   RoleService.toggleRole(roleId, set);
