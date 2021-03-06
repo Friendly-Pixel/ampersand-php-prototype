@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService, SessionStorageService } from 'angular-web-storage';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { NotificationCenterService } from '../notification-center/notification-center.service';
 import { ApiService } from '../api.service';
 
@@ -95,9 +95,9 @@ export class NavbarService {
         this.navbar.ext = data.ext;
 
         // Content for session storage
-        this.sessionStorage.set('session', data.session);
-        this.sessionStorage.set('sessionRoles', data.sessionRoles);
-        this.sessionStorage.set('sessionVars', data.sessionVars);
+        this.sessionStorage.store('session', data.session);
+        this.sessionStorage.store('sessionRoles', data.sessionRoles);
+        this.sessionStorage.store('sessionVars', data.sessionVars);
 
         // Save default settings
         this.defaultSettings = data.defaultSettings;
@@ -119,7 +119,7 @@ export class NavbarService {
 
     // Check for undefined settings
     for (const [key, value] of Object.entries(this.defaultSettings)) {
-      if (this.localStorage.get(key) === null) {
+      if (this.localStorage.retrieve(key) === null) {
         resetRequired = true;
       }
     }
@@ -132,7 +132,7 @@ export class NavbarService {
 
     // set
     for (const [key, value] of Object.entries(this.defaultSettings)) {
-      this.localStorage.set(key, value);
+      this.localStorage.store(key, value);
     }
   }
 

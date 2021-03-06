@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NotificationCenterComponent } from './notification-center/notification-center.component';
 
-import { AngularWebStorageModule } from 'angular-web-storage';
+import {NgxWebstorageModule} from 'ngx-webstorage';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -28,7 +28,7 @@ import {MatDividerModule} from '@angular/material/divider';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    AngularWebStorageModule,
+    NgxWebstorageModule.forRoot({ prefix: 'app', separator: '.', caseSensitive:true }),
     HttpClientModule,
     NoopAnimationsModule, // import HttpClientModule after BrowserModule.
     MatSlideToggleModule,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarService } from './navbar.service';
 import { NotificationCenterService } from '../notification-center/notification-center.service';
 import { ApiService } from '../api.service';
-import { LocalStorageService, SessionStorageService, LocalStorage, SessionStorage } from 'angular-web-storage';
+import { LocalStorageService, SessionStorageService, LocalStorage, SessionStorage } from 'ngx-webstorage';
 import { Location } from '@angular/common';
 
 @Component({
@@ -21,7 +21,8 @@ export class NavbarComponent implements OnInit {
   @LocalStorage() notify_showSuccesses: boolean;
   @LocalStorage() notify_autoHideSuccesses: boolean;
 
-  @SessionStorage() sessionRoles: Array<any> = [];
+  @SessionStorage('sessionRoles', [])
+  public sessionRoles: Array<any>;
 
   public loadingNavBar = [];
 
