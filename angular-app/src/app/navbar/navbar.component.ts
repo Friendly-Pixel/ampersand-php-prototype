@@ -21,7 +21,7 @@ export class NavbarComponent implements OnInit {
   @LocalStorage() notify_showSuccesses: boolean;
   @LocalStorage() notify_autoHideSuccesses: boolean;
 
-  @SessionStorage() sessionRoles: Array<any>;
+  @SessionStorage() sessionRoles: Array<any> = [];
 
   public loadingNavBar = [];
 

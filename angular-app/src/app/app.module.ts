@@ -12,6 +12,11 @@ import { AngularWebStorageModule } from 'angular-web-storage';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -27,6 +32,11 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     HttpClientModule,
     NoopAnimationsModule, // import HttpClientModule after BrowserModule.
     MatSlideToggleModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatDividerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
