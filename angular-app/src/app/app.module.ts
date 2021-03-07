@@ -6,6 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { MenuItemsComponent } from './navbar/menu-items/menu-items.component';
+import { NavbarItemComponent } from './navbar/navbar-item/navbar-item.component';
 import { NotificationCenterComponent } from './notification-center/notification-center.component';
 
 import {NgxWebstorageModule} from 'ngx-webstorage';
@@ -25,7 +27,9 @@ import {MatListModule} from '@angular/material/list';
   declarations: [
     AppComponent,
     NavbarComponent,
-    NotificationCenterComponent
+    NotificationCenterComponent,
+    MenuItemsComponent,
+    NavbarItemComponent
   ],
   imports: [
     BrowserModule,

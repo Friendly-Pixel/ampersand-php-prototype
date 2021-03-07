@@ -8,7 +8,7 @@
     
     <!-- Menu < small -->
     <div fxHide fxShow.lt-sm="true">
-        <button mat-button *ngFor="let item of getMenuItems(1,1)">{{item.label}}</button>
+        <app-navbar-item *ngFor="let item of getMenuItems(1,1)" [item]="item"></app-navbar-item>
         <div *ngIf="getMenuItems(2).length > 0" style="display: inline;">
             <button mat-button [matMenuTriggerFor]="xsMoreMenu">
                 <mat-icon>menu</mat-icon>
@@ -18,17 +18,23 @@
     </div>
     <!-- Menu small -->
     <div fxHide fxShow.sm="true">
-        <button mat-button *ngFor="let item of getMenuItems(1,2)">{{item.label}}</button>
+        <app-navbar-item *ngFor="let item of getMenuItems(1,2)" [item]="item"></app-navbar-item>
         <div *ngIf="getMenuItems(3).length > 0" style="display: inline;">
-            <button mat-button [matMenuTriggerFor]="smMoreMenu">More</button>
+            <button mat-button [matMenuTriggerFor]="smMoreMenu">
+                <span>More</span>
+                <mat-icon>expand_more</mat-icon>
+            </button>
             <mat-menu #smMoreMenu="matMenu"></mat-menu>
         </div>
     </div>
     <!-- Menu > small -->
     <div fxHide fxShow.gt-sm="true">
-        <button mat-button *ngFor="let item of getMenuItems(1,4)">{{item.label}}</button>
+        <app-navbar-item *ngFor="let item of getMenuItems(1,4)" [item]="item"></app-navbar-item>
         <div *ngIf="getMenuItems(5).length > 0" style="display: inline;">
-            <button mat-button [matMenuTriggerFor]="mdMoreMenu">More</button>
+            <button mat-button [matMenuTriggerFor]="mdMoreMenu">
+                <span>More</span>
+                <mat-icon>expand_more</mat-icon>
+            </button>
             <mat-menu #mdMoreMenu="matMenu"></mat-menu>
         </div>
     </div>

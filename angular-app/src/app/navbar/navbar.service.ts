@@ -76,14 +76,7 @@ export class NavbarService {
     return this.getNavbarPromise()
       .then(data => {
         // Content of navbar
-        let hasChildren = function () {
-          return this.children.length > 0;
-        };
-        let navItems = data.navs.map(item => {
-          item.hasChildren = hasChildren.bind(item);
-          return item;
-        });
-        let menus = this.treeify(navItems, 'id', 'parent', 'children');
+        let menus = this.treeify(data.navs, 'id', 'parent', 'children');
         this.navbar.home = data.home;
 
         let mainMenu = menus.find(menu => {
