@@ -10,7 +10,9 @@
     <div fxHide fxShow.lt-sm="true">
         <button mat-button *ngFor="let item of getMenuItems(1,1)">{{item.label}}</button>
         <div *ngIf="getMenuItems(2).length > 0" style="display: inline;">
-            <button mat-button [matMenuTriggerFor]="xsMoreMenu">More</button>
+            <button mat-button [matMenuTriggerFor]="xsMoreMenu">
+                <mat-icon>menu</mat-icon>
+            </button>
             <mat-menu #xsMoreMenu="matMenu"></mat-menu>
         </div>
     </div>
@@ -32,6 +34,13 @@
     </div>
     
     <span class="example-spacer"></span>
+
+    <!-- New -->
+    <button mat-icon-button [matMenuTriggerFor]="newMenu">
+        <mat-icon>add</mat-icon>
+    </button>
+    <mat-menu #newMenu="matMenu">
+    </mat-menu>
     
     <!-- Notifications -->
     <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
@@ -57,7 +66,7 @@
     </mat-menu>
     
     <!-- Apps and extensions menu -->
-    <button mat-icon-button [matMenuTriggerFor]="extMenu">
+    <button fxShow fxHide.lt-sm="true" mat-icon-button [matMenuTriggerFor]="extMenu">
         <mat-icon>apps</mat-icon>
     </button>
     <mat-menu #extMenu="matMenu">
