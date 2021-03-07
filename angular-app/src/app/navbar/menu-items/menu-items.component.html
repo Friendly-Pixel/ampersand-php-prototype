@@ -9,9 +9,16 @@
         </span>
         <!-- Handle leaf node menu items -->
         <span *ngIf="!child.children || child.children.length === 0">
-            <button mat-menu-item>
+            <!-- Link to interface -->
+            <a mat-menu-item [routerLink]="child.ifc" *ngIf="child.ifc">
                 <span>{{child.label}}</span>
-            </button>
+            </a>
+            <!-- Link to (external) url -->
+            <a mat-menu-item href="{{child.url}}" *ngIf="child.url" >
+                <span>{{child.label}}</span>
+            </a>
+            <!-- Menu item with no action -->
+            <span mat-menu-item *ngIf="!child.ifc && !child.url">{{child.label}}</span>
         </span>
     </span>
 </mat-menu>

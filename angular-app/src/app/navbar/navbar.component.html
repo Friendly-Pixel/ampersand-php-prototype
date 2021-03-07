@@ -53,12 +53,12 @@
                     <span>{{item.label}}</span>
                 </button>
                 <mat-menu #subMenu="matMenu">
-                    <button mat-menu-item *ngFor="let ifc of item.ifcs" (click)="createNewResource(ifc.resourceType, ifc.link)">{{ifc.label}}</button>
+                    <button mat-menu-item *ngFor="let ifc of item.ifcs" routerLink="/{{ifc.link}}?new=1">{{ifc.label}}</button>
                 </mat-menu>
             </ng-container>
             <!-- Single interface for new concept => direct link -->
             <ng-container *ngIf="item.ifcs.length == 1">
-                <button mat-menu-item (click)="createNewResource(item.ifcs[0].resourceType, item.ifcs[0].link)">{{item.label}}</button>
+                <a mat-menu-item routerLink="/{{item.ifcs[0].link}}?new=1">{{item.label}}</a>
             </ng-container>
         </ng-container>
     </mat-menu>

@@ -8,7 +8,14 @@
 </span>
 <!-- Leaf node buttons here -->
 <span *ngIf="!item.children || item.children.length === 0">
-    <button mat-button>
+    <!-- Link to interface -->
+    <a mat-button [routerLink]="item.ifc" *ngIf="item.ifc">
         <span>{{item.label}}</span>
-    </button>
+    </a>
+    <!-- Link to (external) url -->
+    <a mat-button href="{{item.url}}" *ngIf="item.url" >
+        <span>{{item.label}}</span>
+    </a>
+    <!-- Menu item with no action -->
+    <span *ngIf="!item.ifc && !item.url">{{item.label}}</span>
 </span>
