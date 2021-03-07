@@ -119,7 +119,7 @@
     </button>
     <mat-menu #roleMenu="matMenu">
         <li mat-menu-item *ngFor="let role of sessionRoles" (click)="$event.stopPropagation()">
-            <mat-slide-toggle [(ngModel)]="role.active" (click)="toggleRole(role.id)" ngDefaultControl>{{role.label}}</mat-slide-toggle>
+            <mat-slide-toggle [ngModel]="role.active" (ngModelChange)="toggleRole(role.id)" ngDefaultControl>{{role.label}}</mat-slide-toggle>
         </li>
         <mat-divider></mat-divider>
         <button mat-menu-item>
