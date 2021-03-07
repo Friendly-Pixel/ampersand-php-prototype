@@ -8,6 +8,7 @@ import { Location } from '@angular/common';
 interface NavBar {
   home: string;
   top: Array<any>;
+  new: Array<any>;
 }
 
 @Component({

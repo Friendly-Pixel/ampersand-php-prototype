@@ -40,6 +40,21 @@
         <mat-icon>add</mat-icon>
     </button>
     <mat-menu #newMenu="matMenu">
+        <ng-container *ngFor="let item of navbar.new">
+            <!-- Multiple interface for new concept => sub menu structure -->
+            <ng-container *ngIf="item.ifcs.length > 1">
+                <button mat-menu-item [matMenuTriggerFor]="subMenu">
+                    <span>{{item.label}}</span>
+                </button>
+                <mat-menu #subMenu="matMenu">
+                    <button mat-menu-item *ngFor="let ifc of item.ifcs" (click)="createNewResource(ifc.resourceType, ifc.link)">{{ifc.label}}</button>
+                </mat-menu>
+            </ng-container>
+            <!-- Single interface for new concept => direct link -->
+            <ng-container *ngIf="item.ifcs.length == 1">
+                <button mat-menu-item (click)="createNewResource(item.ifcs[0].resourceType, item.ifcs[0].link)">{{item.label}}</button>
+            </ng-container>
+        </ng-container>
     </mat-menu>
     
     <!-- Notifications -->
