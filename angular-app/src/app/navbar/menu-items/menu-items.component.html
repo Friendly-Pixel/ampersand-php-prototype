@@ -1,5 +1,5 @@
 <mat-menu #childMenu="matMenu" [overlapTrigger]="false">
-    <span *ngFor="let child of items">
+    <span *ngFor="let child of getSortedItems()">
         <!-- Handle branch node menu items -->
         <span *ngIf="child.children && child.children.length > 0">
             <button mat-menu-item [matMenuTriggerFor]="menu.childMenu">

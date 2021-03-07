@@ -10,7 +10,7 @@ export class MenuItemsComponent {
   @Input() items: NavItem[];
   @ViewChild("childMenu", { static: true }) public childMenu;
 
-  public getChildren() {
+  public getSortedItems() {
     return this.items.sort((a, b) => a.seqNr - b.seqNr);
   }
 }
