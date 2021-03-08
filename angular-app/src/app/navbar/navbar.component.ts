@@ -6,7 +6,6 @@ import { Location } from "@angular/common";
 import { RoleService } from "../rbac/role.service";
 
 interface NavBar {
-  home: string;
   top: Array<any>;
   new: Array<any>;
 }
