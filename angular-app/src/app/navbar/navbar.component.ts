@@ -4,11 +4,7 @@ import { NotificationCenterService } from "../notification-center/notification-c
 import { LocalStorage, SessionStorage } from "ngx-webstorage";
 import { Location } from "@angular/common";
 import { RoleService } from "../rbac/role.service";
-
-interface NavBar {
-  top: Array<any>;
-  new: Array<any>;
-}
+import { Navbar } from "./navbar";
 
 @Component({
   selector: "app-navbar",
@@ -27,23 +23,27 @@ export class NavbarComponent implements OnInit {
 
   @SessionStorage("sessionRoles", [])
   public sessionRoles: Array<any>;
-
-  public navbar: NavBar;
-  public resetSettingsToDefault;
-  public checkAllRules;
+  public navbar: Navbar;
 
   constructor(
     protected navbarService: NavbarService,
     protected notificationService: NotificationCenterService,
     protected location: Location,
     protected roleService: RoleService
-  ) {}
+  ) {
+    this.navbar = {
+      top: [],
+      new: [],
+      role: [],
+      ext: [],
+    };
+  }
 
   ngOnInit() {
-    this.navbarService.refreshNavBar();
-    this.navbar = this.navbarService.navbar;
-    this.resetSettingsToDefault = this.navbarService.resetSettingsToDefault;
-    this.checkAllRules = this.notificationService.checkAllRules;
+    this.navbarService.refreshNavBar().then(
+      (navbar) => (this.navbar = navbar),
+      (err) => console.log(err)
+    );
   }
 
   public getMenuItems(start: number, end?: number) {
@@ -52,10 +52,18 @@ export class NavbarComponent implements OnInit {
       .slice(start - 1, end);
   }
 
+  public resetSettingsToDefault() {
+    this.navbarService.resetSettingsToDefault();
+  }
+
   public async toggleRole(roleId: string, set?: boolean) {
     this.roleService.toggleRole(roleId, set);
     this.roleService.setActiveRoles().then((data) => {
       this.navbarService.refreshNavBar();
     });
+  }
+
+  public checkAllRules() {
+    this.notificationService.checkAllRules();
   }
 }
