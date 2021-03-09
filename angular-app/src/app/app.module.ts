@@ -26,6 +26,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatGridListModule } from "@angular/material/grid-list";
 
 import { HomeComponent } from "./layout/home/home.component";
+import { InstallerComponent } from "./admin/installer/installer.component";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { HomeComponent } from "./layout/home/home.component";
     MenuItemsComponent,
     NavbarItemComponent,
     HomeComponent,
+    InstallerComponent,
   ],
   imports: [
     BrowserModule,
