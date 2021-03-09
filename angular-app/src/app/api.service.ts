@@ -20,10 +20,10 @@ export class ApiService {
     return body || {};
   }
 
-  public get(path: string): Promise<any> {
+  public get(path: string, options: object = {}): Promise<any> {
     let promise = new Promise((resolve, reject) => {
       this.http
-        .get(this.baseUrl + "/" + path, this.defaultOptions)
+        .get(this.baseUrl + "/" + path, { ...this.defaultOptions, ...options })
         .toPromise()
         .then((res) => {
           // Success

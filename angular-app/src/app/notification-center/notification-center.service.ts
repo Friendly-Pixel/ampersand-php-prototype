@@ -1,17 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class NotificationCenterService {
+  constructor() {}
 
-  constructor() { }
+  public updateNotifications(data) {}
 
-  public updateNotifications (data) {
+  public clearNotifications() {}
 
-  }
-
-  public checkAllRules () {
-    
-  }
+  public checkAllRules() {}
 }
