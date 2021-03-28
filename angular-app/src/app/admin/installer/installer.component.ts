@@ -1,8 +1,11 @@
 import { Component, OnInit } from "@angular/core";
+import { NgxSpinnerService } from "ngx-spinner";
 import { ApiService } from "src/app/api.service";
 import { NavbarService } from "src/app/navbar/navbar.service";
 import { NotificationCenterService } from "src/app/notification-center/notification-center.service";
 import { RoleService } from "src/app/rbac/role.service";
+
+const SPINNER_NAME = "installer";
 
 @Component({
   selector: "app-installer",
@@ -13,16 +16,20 @@ export class InstallerComponent implements OnInit {
   public numberOfCols: number;
   public installing: boolean = false;
   public installed: boolean = false;
+  public errored: boolean = false;
+  public buttonColor: string = "primary";
 
   constructor(
     protected api: ApiService,
     protected notificationCenter: NotificationCenterService,
     protected navbarService: NavbarService,
-    protected roleService: RoleService
+    protected roleService: RoleService,
+    public spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
     this.numberOfCols = this.getColsFor(window.innerWidth);
+    stateInit(this);
   }
 
   onResize(event) {
@@ -30,8 +37,7 @@ export class InstallerComponent implements OnInit {
   }
 
   public reinstall(defaultPopulation = true, ignoreInvariantRules = false) {
-    this.installing = true;
-    this.installed = false;
+    stateInstalling(this);
     this.notificationCenter.clearNotifications();
 
     this.api
@@ -49,12 +55,10 @@ export class InstallerComponent implements OnInit {
           // deactive all roles
           this.roleService.deactivateAllRoles();
 
-          this.installing = false;
-          this.installed = true;
+          stateInstalled(this);
         },
         (err) => {
-          this.installing = false;
-          this.installed = false;
+          stateErrored(this);
         }
       );
   }
@@ -72,4 +76,34 @@ export class InstallerComponent implements OnInit {
 
     return 4;
   }
+}
+
+function stateInit(component: InstallerComponent) {
+  component.installed = false;
+  component.installing = false;
+  component.errored = false;
+  component.buttonColor = "primary";
+  component.spinner.hide(SPINNER_NAME);
+}
+
+function stateInstalling(component: InstallerComponent) {
+  component.installed = false;
+  component.installing = true;
+  component.errored = false;
+  component.spinner.show(SPINNER_NAME);
+}
+
+function stateInstalled(component: InstallerComponent) {
+  component.installed = true;
+  component.installing = false;
+  component.errored = false;
+  component.buttonColor = "basic";
+  component.spinner.hide(SPINNER_NAME);
+}
+function stateErrored(component: InstallerComponent) {
+  component.installed = false;
+  component.installing = false;
+  component.errored = true;
+  component.buttonColor = "warn";
+  component.spinner.hide(SPINNER_NAME);
 }

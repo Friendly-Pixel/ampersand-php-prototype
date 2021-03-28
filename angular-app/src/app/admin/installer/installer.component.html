@@ -1,32 +1,17 @@
 <mat-grid-list [cols]="numberOfCols" rowHeight="300px" (window:resize)="onResize($event)">
   <mat-grid-tile>
     <mat-card class="home-card">
-      <mat-card-title>Application (re)install</mat-card-title>
-      <!-- <mat-card-subtitle></mat-card-subtitle> -->
+      <ngx-spinner name="installer" bdColor="rgba(0,0,0,0.3)" size="medium" color="#fff" type="ball-scale" [fullScreen]="false">
+        <p style="color: white">Installing...</p>
+      </ngx-spinner>
+      <mat-card-title>Application (re)install <mat-icon *ngIf="installed" style="color: green">task_alt</mat-icon></mat-card-title>
       <mat-card-content>
         <p>This action will reinstall the application and database and delete all content.</p>
         <p>If provided, the initial population will be installed.</p>
-        <button mat-button color="primary" (click)="reinstall()">Reinstall</button>
-        <button mat-button color="primary" (click)="reinstall(false, false)">Reinstall (without default population)</button>
-        <button mat-button color="primary" (click)="reinstall(true, true)">Reinstall (ignore invariant rules)</button>
+        <button mat-button [color]="buttonColor" (click)="reinstall()">Reinstall</button>
+        <button mat-button [color]="buttonColor" (click)="reinstall(false, false)">Reinstall (without default population)</button>
+        <button mat-button [color]="buttonColor" (click)="reinstall(true, true)">Reinstall (ignore invariant rules)</button>
       </mat-card-content>
     </mat-card>
   </mat-grid-tile>
 </mat-grid-list>
-
-<!-- <div class="btn-group">
-    <button type="button" ng-click="install(true)" class="btn btn-lg" ng-class="{'btn-danger' : (!installing && !installed), 'btn-warning' : installing, 'btn-success' : installed}" ng-disabled="installing">
-        <span ng-if="!installed && ! installing">Reinstall application  </span>
-        <span ng-if="installing">Application installing  </span>
-        <span ng-if="installed">Application reinstalled  </span>
-        <img ng-if="installing" ng-src="app/images/loading.gif" style="height:20px;"/>
-    </button>
-    <button type="button" class="btn btn-lg dropdown-toggle" ng-class="{'btn-danger' : (!installing && !installed), 'btn-warning' : installing, 'btn-success' : installed}" ng-disabled="installing" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-        <li><a href="" ng-click="install(true, false)">Reinstall application</a></li>
-        <li><a href="" ng-click="install(false, false)">Reinstall application (without default population)</a></li>
-        <li><a href="" ng-click="install(true, true)">Reinstall application (ignore invariant rules)</a></li>
-    </ul>
-</div> -->
