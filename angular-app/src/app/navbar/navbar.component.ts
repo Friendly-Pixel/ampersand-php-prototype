@@ -62,8 +62,4 @@ export class NavbarComponent implements OnInit {
       this.navbarService.refreshNavBar();
     });
   }
-
-  public checkAllRules() {
-    this.notifySvc.checkAllRules();
-  }
 }
