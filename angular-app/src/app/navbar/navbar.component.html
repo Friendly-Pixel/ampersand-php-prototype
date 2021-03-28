@@ -104,7 +104,7 @@
             <mat-icon>running_with_errors</mat-icon>
             <span>(Re)evaluate all rules</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="notifySvc.runExecEngine()">
             <mat-icon>code</mat-icon>
             <span>Run execution engine</span>
         </button>

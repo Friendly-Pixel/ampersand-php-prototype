@@ -32,6 +32,18 @@ export class NotificationCenterService {
     );
   }
 
+  public runExecEngine() {
+    this.api.get("admin/execengine/run").then(
+      (data) => {
+        this.success("Execution engine runned");
+        this.updateNotifications(data);
+      },
+      (err) => {
+        this.error("Something went wrong while running the execution engine");
+      }
+    );
+  }
+
   notify(message: string, actionMsg: string = "Dismiss") {
     return this.snackBar.open(message, actionMsg, {
       duration: 3000,
