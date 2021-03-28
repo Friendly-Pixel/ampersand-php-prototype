@@ -21,7 +21,7 @@ export class InstallerComponent implements OnInit {
 
   constructor(
     protected api: ApiService,
-    protected notificationCenter: NotificationCenterService,
+    protected notifySvc: NotificationCenterService,
     protected navbarService: NavbarService,
     protected roleService: RoleService,
     public spinner: NgxSpinnerService
@@ -38,7 +38,7 @@ export class InstallerComponent implements OnInit {
 
   public reinstall(defaultPopulation = true, ignoreInvariantRules = false) {
     stateInstalling(this);
-    this.notificationCenter.clearNotifications();
+    this.notifySvc.clearNotifications();
 
     this.api
       .get("admin/installer", {
@@ -49,13 +49,12 @@ export class InstallerComponent implements OnInit {
       })
       .then(
         (data) => {
-          this.notificationCenter.updateNotifications(data);
+          stateInstalled(this);
+
+          this.roleService.deactivateAllRoles();
           this.navbarService.refreshNavBar();
 
-          // deactive all roles
-          this.roleService.deactivateAllRoles();
-
-          stateInstalled(this);
+          this.notifySvc.notify("Application reinstalled");
         },
         (err) => {
           stateErrored(this);
