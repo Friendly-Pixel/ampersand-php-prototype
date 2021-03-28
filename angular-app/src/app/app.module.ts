@@ -28,6 +28,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 
 import { HomeComponent } from "./layout/home/home.component";
 import { InstallerComponent } from "./admin/installer/installer.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -64,7 +65,7 @@ import { InstallerComponent } from "./admin/installer/installer.component";
     NgxSpinnerModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
+  providers: [MatSnackBar],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

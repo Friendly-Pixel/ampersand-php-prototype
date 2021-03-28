@@ -1,15 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-notification-center',
-  templateUrl: './notification-center.component.html',
-  styleUrls: ['./notification-center.component.css']
+  selector: "app-notification-center",
+  templateUrl: "./notification-center.component.html",
+  styleUrls: ["./notification-center.component.css"],
 })
 export class NotificationCenterComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }
