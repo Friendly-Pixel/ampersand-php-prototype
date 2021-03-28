@@ -5,13 +5,13 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
   providedIn: "root",
 })
 export class ApiService {
-  private defaultOptions = {
+  protected defaultOptions = {
     headers: new HttpHeaders({
       "Content-Type": "application/json",
     }),
   };
 
-  private baseUrl = "api/v1";
+  protected baseUrl = "api/v1/";
 
   constructor(private http: HttpClient) {}
 
@@ -21,34 +21,20 @@ export class ApiService {
   }
 
   public get(path: string, options: object = {}): Promise<any> {
-    let promise = new Promise((resolve, reject) => {
-      this.http
-        .get(this.baseUrl + "/" + path, { ...this.defaultOptions, ...options })
-        .toPromise()
-        .then((res) => {
-          // Success
-          console.log(res);
-          resolve(res);
-        });
-    });
-    return promise;
+    return this.http
+      .get(this.baseUrl + path, { ...this.defaultOptions, ...options })
+      .toPromise();
   }
 
-  // TODO: implement
-  public post(path: string, data: object): Promise<any> {
-    return Promise.resolve();
+  public post(path: string, data: object, options: object = {}): Promise<any> {
+    return this.http
+      .post(this.baseUrl + path, data, { ...this.defaultOptions, ...options })
+      .toPromise();
   }
 
-  public async patch(path: string, data: object): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.http
-        .patch(this.baseUrl + "/" + path, data, this.defaultOptions)
-        .toPromise()
-        .then((res) => {
-          // Success
-          console.log(res);
-          resolve(res);
-        });
-    });
+  public patch(path: string, data: object, options: object = {}): Promise<any> {
+    return this.http
+      .patch(this.baseUrl + path, data, { ...this.defaultOptions, ...options })
+      .toPromise();
   }
 }
