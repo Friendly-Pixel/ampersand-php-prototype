@@ -64,6 +64,11 @@
     </mat-menu>
     
     <!-- Notifications -->
+    <button mat-icon-button routerLink="notifications">
+        <mat-icon [matBadge]="notifySvc.nrOfNotifications" matBadgeColor="accent" [matBadgeHidden]="notifySvc.nrOfNotifications == 0">notifications</mat-icon>
+    </button>
+
+    <!-- TODO: stuff below can be removed -->
     <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
         <mat-icon>notifications</mat-icon>
     </button>

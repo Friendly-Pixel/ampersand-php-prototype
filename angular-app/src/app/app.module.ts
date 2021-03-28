@@ -24,11 +24,12 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
 import { MatCardModule } from "@angular/material/card";
 import { MatGridListModule } from "@angular/material/grid-list";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatBadgeModule } from "@angular/material/badge";
 import { NgxSpinnerModule } from "ngx-spinner";
 
 import { HomeComponent } from "./layout/home/home.component";
 import { InstallerComponent } from "./admin/installer/installer.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
     MatDividerModule,
     MatCardModule,
     MatGridListModule,
+    MatBadgeModule,
     NgxSpinnerModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

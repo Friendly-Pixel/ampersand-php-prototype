@@ -11,6 +11,7 @@ import {
 export class NotificationCenterService {
   horizontalPosition: MatSnackBarHorizontalPosition = "center";
   verticalPosition: MatSnackBarVerticalPosition = "bottom";
+  public nrOfNotifications: number = 10;
 
   constructor(protected snackBar: MatSnackBar) {}
 

@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     protected navbarService: NavbarService,
-    protected notificationService: NotificationCenterService,
+    public notifySvc: NotificationCenterService,
     protected location: Location,
     protected roleService: RoleService
   ) {
@@ -64,6 +64,6 @@ export class NavbarComponent implements OnInit {
   }
 
   public checkAllRules() {
-    this.notificationService.checkAllRules();
+    this.notifySvc.checkAllRules();
   }
 }
