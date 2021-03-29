@@ -1,6 +1,6 @@
 <mat-grid-list [cols]="numberOfCols" rowHeight="300px" (window:resize)="onResize($event)">
-  <mat-grid-tile>
-    <mat-card class="home-card">
+  <mat-grid-tile class="my-tile">
+    <mat-card class="my-card">
       <ngx-spinner name="installer" bdColor="rgba(0,0,0,0.3)" size="medium" color="#fff" type="ball-scale" [fullScreen]="false">
         <p style="color: white">Installing...</p>
       </ngx-spinner>
@@ -12,6 +12,17 @@
         <button mat-button [color]="buttonColor" (click)="reinstall(false, false)">Reinstall (without default population)</button>
         <button mat-button [color]="buttonColor" (click)="reinstall(true, true)">Reinstall (ignore invariant rules)</button>
       </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile class="my-tile">
+    <mat-card class="my-card">
+      <mat-card-title>Export population</mat-card-title>
+      <mat-card-content>
+        <p>Export the population of the application. This allows you to import it again after reinstalling the application</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <a mat-button color="primary" href="api/v1/admin/exporter/export/all">Export</a>
+      </mat-card-actions>
     </mat-card>
   </mat-grid-tile>
 </mat-grid-list>

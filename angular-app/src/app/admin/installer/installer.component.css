@@ -1,0 +1,9 @@
+.my-card {
+    margin: 1em;
+    width: 100%;
+}
+
+.my-tile >::ng-deep .mat-figure {
+    justify-content: flex-start !important ;
+    align-items: flex-start !important;
+}
