@@ -32,6 +32,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { HomeComponent } from "./layout/home/home.component";
 import { InstallerComponent } from "./admin/installer/installer.component";
 import { ImporterComponent } from "./admin/importer/importer.component";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { ImporterComponent } from "./admin/importer/importer.component";
     MatBadgeModule,
     NgxSpinnerModule,
     FileUploadModule,
+    NgbModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [MatSnackBar],
