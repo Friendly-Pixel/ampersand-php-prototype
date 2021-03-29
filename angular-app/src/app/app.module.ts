@@ -11,6 +11,7 @@ import { NavbarItemComponent } from "./navbar/navbar-item/navbar-item.component"
 import { NotificationCenterComponent } from "./notification-center/notification-center.component";
 
 import { NgxWebstorageModule } from "ngx-webstorage";
+import { FileUploadModule } from "ng2-file-upload";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -30,7 +31,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 
 import { HomeComponent } from "./layout/home/home.component";
 import { InstallerComponent } from "./admin/installer/installer.component";
-import { ImporterComponent } from './admin/importer/importer.component';
+import { ImporterComponent } from "./admin/importer/importer.component";
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { ImporterComponent } from './admin/importer/importer.component';
     MatGridListModule,
     MatBadgeModule,
     NgxSpinnerModule,
+    FileUploadModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [MatSnackBar],
