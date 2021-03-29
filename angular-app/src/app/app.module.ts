@@ -30,6 +30,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 
 import { HomeComponent } from "./layout/home/home.component";
 import { InstallerComponent } from "./admin/installer/installer.component";
+import { ImporterComponent } from './admin/importer/importer.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { InstallerComponent } from "./admin/installer/installer.component";
     NavbarItemComponent,
     HomeComponent,
     InstallerComponent,
+    ImporterComponent,
   ],
   imports: [
     BrowserModule,
