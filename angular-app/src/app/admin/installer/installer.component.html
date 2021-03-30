@@ -1,39 +1,51 @@
-<mat-grid-list [cols]="numberOfCols" rowHeight="250px" (window:resize)="onResize($event)">
-  <mat-grid-tile class="my-tile">
-    <mat-card class="my-card">
+<div class="container-fluid">
+  <div class="card-deck">
+    <!-- Install -->
+    <div class="card">
       <ngx-spinner name="installer" bdColor="rgba(0,0,0,0.3)" size="medium" color="#fff" type="ball-scale" [fullScreen]="false">
         <p style="color: white">Installing...</p>
       </ngx-spinner>
-      <mat-card-title>Application (re)install <mat-icon *ngIf="installed" style="color: green">task_alt</mat-icon></mat-card-title>
-      <mat-card-content>
-        <p>This action will reinstall the application and database and delete all content.</p>
-        <p>If provided, the initial population will be installed.</p>
-        <button mat-button [color]="buttonColor" (click)="reinstall()">Reinstall</button>
-        <button mat-button [color]="buttonColor" (click)="reinstall(false, false)">Reinstall (without default population)</button>
-        <button mat-button [color]="buttonColor" (click)="reinstall(true, true)">Reinstall (ignore invariant rules)</button>
-      </mat-card-content>
-    </mat-card>
-  </mat-grid-tile>
-  <mat-grid-tile class="my-tile">
-    <mat-card class="my-card">
-      <mat-card-title>Export population</mat-card-title>
-      <mat-card-content>
-        <p>Export the population of the application. This allows you to import it again after reinstalling the application</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <a mat-button color="primary" href="api/v1/admin/exporter/export/all">Export</a>
-      </mat-card-actions>
-    </mat-card>
-  </mat-grid-tile>
-  <mat-grid-tile class="my-tile">
-    <mat-card class="my-card">
-      <mat-card-title>Import population</mat-card-title>
-      <mat-card-content>
-        <p>Import population from JSON or Excel file</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <a mat-button color="primary" routerLink="/admin/importer">Import</a>
-      </mat-card-actions>
-    </mat-card>
-  </mat-grid-tile>
-</mat-grid-list>
+      <div class="card-body">
+        <h5 class="card-title">Application (re)install</h5>
+        <p class="card-text">This action will reinstall the application and database and delete all content.</p>
+        <p class="card-text">If provided, the initial population will be installed.</p>
+      </div>
+      <div class="card-footer bg-transparent">
+        <div class="btn-group">
+          <button type="button" class="btn btn-sm" (click)="reinstall()"
+            [class]="{'btn-danger' : !installed, 'btn-success' : installed}">Reinstall</button>
+          <div class="btn-group" ngbDropdown role="group">
+            <button class="btn btn-sm dropdown-toggle-split" ngbDropdownToggle
+              [class]="{'btn-danger' : !installed, 'btn-success' : installed}"></button>
+            <div class="dropdown-menu" ngbDropdownMenu>
+              <button ngbDropdownItem (click)="reinstall()">Reinstall</button>
+              <button ngbDropdownItem (click)="reinstall(false, false)">Reinstall (without default population)</button>
+              <button ngbDropdownItem (click)="reinstall(true, true)">Reinstall (ignore invariant rules)</button>
+            </div>
+          </div>
+          <span *ngIf="installed" class="text-success ml-3">Application reinstalled</span>
+        </div>
+      </div>
+    </div>
+    <!-- Export -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Export population</h5>
+        <p class="card-text">Export the population of the application. This allows you to import it again after reinstalling the application</p>
+      </div>
+      <div class="card-footer bg-transparent">
+        <a class="card-link" href="api/v1/admin/exporter/export/all" target="_blank">Export</a>
+      </div>
+    </div>
+    <!-- Import -->
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Import population</h5>
+        <p class="card-text">Import population from JSON or Excel file</p>
+      </div>
+      <div class="card-footer bg-transparent">
+        <a class="card-link" routerLink="/admin/importer">Import</a>
+      </div>
+    </div>
+  </div>
+</div>
