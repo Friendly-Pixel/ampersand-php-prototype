@@ -30,10 +30,7 @@ export class ImporterComponent implements OnInit {
     });
 
     this.hasBaseDropZoneOver = false;
-    this.hasAnotherDropZoneOver = false;
-
     this.response = "";
-
     this.uploader.response.subscribe((res) => (this.response = res));
   }
 
@@ -41,9 +38,5 @@ export class ImporterComponent implements OnInit {
 
   public fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;
-  }
-
-  public fileOverAnother(e: any): void {
-    this.hasAnotherDropZoneOver = e;
   }
 }
