@@ -15,18 +15,6 @@ export class ImporterComponent implements OnInit {
   constructor() {
     this.uploader = new FileUploader({
       url: "api/v1/admin/import",
-      disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
-      formatDataFunctionIsAsync: true,
-      formatDataFunction: async (item) => {
-        return new Promise((resolve, reject) => {
-          resolve({
-            name: item._file.name,
-            length: item._file.size,
-            contentType: item._file.type,
-            date: new Date(),
-          });
-        });
-      },
     });
 
     this.hasBaseDropZoneOver = false;
