@@ -13,11 +13,9 @@ const SPINNER_NAME = "installer";
   styleUrls: ["./installer.component.css"],
 })
 export class InstallerComponent implements OnInit {
-  public numberOfCols: number;
   public installing: boolean = false;
   public installed: boolean = false;
   public errored: boolean = false;
-  public buttonColor: string = "primary";
 
   constructor(
     protected api: ApiService,
@@ -28,12 +26,7 @@ export class InstallerComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.numberOfCols = this.getColsFor(window.innerWidth);
     stateInit(this);
-  }
-
-  onResize(event) {
-    this.numberOfCols = this.getColsFor(event.target.innerWidth);
   }
 
   public reinstall(defaultPopulation = true, ignoreInvariantRules = false) {
@@ -61,27 +54,12 @@ export class InstallerComponent implements OnInit {
         }
       );
   }
-
-  protected getColsFor(width: number): number {
-    if (width < 600) {
-      return 1;
-    }
-    if (width < 1024) {
-      return 2;
-    }
-    if (width < 1440) {
-      return 3;
-    }
-
-    return 4;
-  }
 }
 
 function stateInit(component: InstallerComponent) {
   component.installed = false;
   component.installing = false;
   component.errored = false;
-  component.buttonColor = "primary";
   component.spinner.hide(SPINNER_NAME);
 }
 
@@ -96,13 +74,11 @@ function stateInstalled(component: InstallerComponent) {
   component.installed = true;
   component.installing = false;
   component.errored = false;
-  component.buttonColor = "basic";
   component.spinner.hide(SPINNER_NAME);
 }
 function stateErrored(component: InstallerComponent) {
   component.installed = false;
   component.installing = false;
   component.errored = true;
-  component.buttonColor = "warn";
   component.spinner.hide(SPINNER_NAME);
 }
