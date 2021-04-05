@@ -1,17 +1,13 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { BoxFormComponent } from "../box-form/box-form.component";
+import { CRUDComponent } from "../crud-component.class";
 
 @Component({
   selector: "app-box-form-item",
   templateUrl: "./box-form-item.component.html",
   styleUrls: ["./box-form-item.component.css"],
 })
-export class BoxFormItemComponent implements OnInit {
-  public crudC = false;
-  public crudR = true;
-  public crudU = false;
-  public crudD = false;
-
+export class BoxFormItemComponent extends CRUDComponent implements OnInit {
   public status = {
     warning: false,
     danger: false,
@@ -32,16 +28,11 @@ export class BoxFormItemComponent implements OnInit {
   @Input()
   public data: object;
 
-  constructor() {}
+  constructor() {
+    super();
+  }
 
   ngOnInit(): void {}
-
-  isCrudU(): boolean {
-    return this.crudU;
-  }
-  isCrudD(): boolean {
-    return this.crudD;
-  }
 
   save(): void {}
   cancel(): void {}

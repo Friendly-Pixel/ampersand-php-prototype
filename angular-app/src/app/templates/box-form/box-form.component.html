@@ -1,8 +1,8 @@
-<ng-container *ngIf="crudR; else nonReadBlock">
+<ng-container *ngIf="isCrudR(); else nonReadBlock">
     <div class="box box-rows" *ngIf="!hideOnNoRecords || data.length > 0">
         <h4 *ngIf="showTitle()">{{title}}</h4>
         
-        <div *ngIf="crudC && (!isUni || data.length === 0)" class="row">
+        <div *ngIf="isCrudC() && (!isUni || data.length === 0)" class="row">
             <div class="col-xs-12">
                 <button type="button" class="btn btn-sm btn-success" (click)="createItem()">New {{tgtConceptLabel}}</button>
             </div>
@@ -17,7 +17,7 @@
             </li>
 
             <!-- Input to add new link to another resource -->
-            <li *ngIf="crudU && (!isUni || data.length === 0)" class="list-group-item">
+            <li *ngIf="isCrudU() && (!isUni || data.length === 0)" class="list-group-item">
                 <!--
                 <div ng-init="getTypeahead('$target$')">
                     <input ng-model="selected.value" type="text" class="input-sm" placeholder="Add existing $target$" uib-typeahead="item._label_ for item in typeahead['$target$'] | filter:\$viewValue | limitTo:15" typeahead-editable="true" typeahead-on-select="typeaheadOnSelect(\$item, \$model, \$label, resource, '$name$', patchResource)" typeahead-no-results="hasNoResults">
