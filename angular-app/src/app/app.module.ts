@@ -34,6 +34,7 @@ import { InstallerComponent } from "./admin/installer/installer.component";
 import { ImporterComponent } from "./admin/importer/importer.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { TemplatesModule } from "./templates/templates.module";
+import { GeneratedModule } from "./generated/generated.module";
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { TemplatesModule } from "./templates/templates.module";
     FileUploadModule,
     NgbModule,
     TemplatesModule,
+    GeneratedModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [MatSnackBar],
