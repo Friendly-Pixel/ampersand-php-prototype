@@ -1,0 +1,16 @@
+<div class="box-li-opt">
+    <button *ngIf="showButtons.save" type="button" class="btn btn-xs btn-warning" (click)="save()">Save</button>
+    <button *ngIf="showButtons.cancel" type="button" class="btn btn-xs btn-danger" (click)="cancel()">Cancel</button>
+    <button *ngIf="isCrudU() && !showButtons.cancel" type="button" class="btn btn-xs" (click)="removeItem()"
+        uib-tooltip="Remove" tooltip-trigger="mouseenter" tooltip-placement="left">
+        <i class="bi bi-dash"></i>
+    </button>
+    <button *ngIf="isCrudD() && !showButtons.cancel" type="button" class="btn btn-xs btn-danger" (click)="deleteItem()"
+        uib-tooltip="Delete" tooltip-trigger="mouseenter" tooltip-placement="left">
+        <i class="bi bi-trash"></i>
+    </button>
+    <ng-container *ngIf="showNavMenu">
+        <!--<my-nav-to-other-interfaces resource="resource"></my-nav-to-other-interfaces>-->
+    </ng-container>
+</div>
+<ng-content></ng-content>
