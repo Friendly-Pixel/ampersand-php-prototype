@@ -1,0 +1,8 @@
+<div class="row">
+        <div *ngIf="!hideLabel" class="row-label col-md-2 wordwrap">
+            <strong>{{label}}</strong>
+        </div>
+        <div class="row-content" [class]="hideLabel ? 'col-md-12' : 'col-md-10'">
+            <ng-content></ng-content>
+        </div>
+</div>
