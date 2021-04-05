@@ -13,7 +13,8 @@ export class BoxFormComponent implements OnInit {
   public crudD = false;
 
   public showNavMenu = false;
-  public noRootTitle = true;
+
+  @Input()
   public title: string = "";
   public hideOnNoRecords = false;
 
@@ -31,7 +32,7 @@ export class BoxFormComponent implements OnInit {
   ngOnInit(): void {}
 
   showTitle(): boolean {
-    return !this.noRootTitle && this.title !== "";
+    return this.title !== "";
   }
 
   isCrudU(): boolean {
