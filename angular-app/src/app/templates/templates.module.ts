@@ -14,5 +14,11 @@ import { BoxFormRowComponent } from "./box-form-row/box-form-row.component";
     BoxFormRowComponent,
   ],
   imports: [CommonModule, FormsModule],
+  exports: [
+    LeafAlphanumericComponent,
+    BoxFormComponent,
+    BoxFormItemComponent,
+    BoxFormRowComponent,
+  ],
 })
 export class TemplatesModule {}
