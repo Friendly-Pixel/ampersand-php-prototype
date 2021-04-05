@@ -8,23 +8,27 @@ import { Component, Input, OnInit } from "@angular/core";
 export class LeafAlphanumericComponent implements OnInit {
   public crudC = false;
   public crudR = true;
-  public crudU = false;
+  public crudU = true;
   public crudD = false;
 
   public isUni = true;
   public isTot = false;
 
   @Input()
-  public list: Array<string> = []; // used when this component has non-uni expression
+  public resource: any;
 
   @Input()
-  public value: string; // used when this component has uni expression
+  public field: string;
 
   public newValue: string;
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  getValues(): Array<string> {
+    return this.isUni ? [this.resource[this.field]] : this.resource[this.field];
+  }
 
   // TODO: implement
   save() {}

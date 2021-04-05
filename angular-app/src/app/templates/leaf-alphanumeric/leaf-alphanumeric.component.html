@@ -1,21 +1,26 @@
 <div *ngIf="crudR; else nonReadBlock" class="input-group">
-    <!-- Display list -->
-    <div *ngFor="let value of list; let i = index" class="wordwrap">
-        <i *ngIf="crudU" class="bi bi-dash" (click)="removeItem(i)"></i>
-        <span>{{value}}</span>
-    </div>
-    <!-- Input to edit or add new -->
-    <ng-container *ngIf="crudU">
-        <div *ngIf="isUni then uniBlock else nonUniBlock"></div>
-        <ng-template #uniBlock>
-            <input [(ngModel)]="value" type="text" placeholder="value" class="form-control input-sm"
+    <div *ngIf="isUni then uniBlock else nonUniBlock"></div>
+    <!-- Univalent -->
+    <ng-template #uniBlock>
+        <ng-container *ngIf="crudU else uniViewOnly">
+            <input [(ngModel)]="resource[field]" type="text" placeholder="value" class="form-control input-sm"
                 [attr.required]="isTot ? '' : null" (blur)="save()">
+        </ng-container>
+        <ng-template #uniViewOnly>
+            <span>{{resource[field]}}</span>
         </ng-template>
-        <ng-template #nonUniBlock>
-            <input [(ngModel)]="newValue" type="text" placeholder="Add value" class="form-control input-sm" 
-                [attr.required]="isTot && list.length === 0 ? '' : null" (blur)="addItem(newValue)">
-        </ng-template>
-    </ng-container>
+    </ng-template>
+    <!-- Non-univalent -->
+    <ng-template #nonUniBlock>
+        <!-- Display list -->
+        <div *ngFor="let value of getValues(); let i = index" class="wordwrap">
+            <i *ngIf="crudU" class="bi bi-dash" (click)="removeItem(i)"></i>
+            <span>{{value}}</span>
+        </div>
+        <!-- Input to edit or add new -->
+        <input *ngIf="crudU" [(ngModel)]="newValue" type="text" placeholder="Add value" class="form-control input-sm" 
+            [attr.required]="isTot && getValues().length === 0 ? '' : null" (blur)="addItem(newValue)">
+    </ng-template>
 </div>
 <ng-template #nonReadBlock>
     <div>
