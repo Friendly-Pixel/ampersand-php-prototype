@@ -8,6 +8,12 @@ import { ApiService } from "src/app/api.service";
   styleUrls: ["./ifc-new-edit-project.component.css"],
 })
 export class IfcNewEditProjectComponent implements OnInit {
+  // TODO: remove this object
+  public testing = {
+    crud: "CRUD",
+    isUni: true,
+    isTot: false,
+  };
   public data: any;
   constructor(protected route: ActivatedRoute, protected api: ApiService) {}
 
