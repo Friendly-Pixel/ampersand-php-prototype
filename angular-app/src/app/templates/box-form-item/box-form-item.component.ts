@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { BoxFormComponent } from "../box-form/box-form.component";
-import { CRUDComponent } from "../crud-component.class";
+import { CRUDComponent } from "../models/crud-component.class";
+import { Resource } from "../models/resource.class";
+import { ResourceService } from "../resource.service";
 
 @Component({
   selector: "app-box-form-item",
@@ -19,16 +20,11 @@ export class BoxFormItemComponent extends CRUDComponent implements OnInit {
     cancel: false,
   };
 
-  @Input()
-  public showNavMenu = false;
+  @Input() public showNavMenu = false;
+  @Input() public parent: Resource;
+  @Input() public resource: Resource;
 
-  @Input()
-  public parent: BoxFormComponent;
-
-  @Input()
-  public data: object;
-
-  constructor() {
+  constructor(protected svc: ResourceService) {
     super();
   }
 
@@ -36,10 +32,6 @@ export class BoxFormItemComponent extends CRUDComponent implements OnInit {
 
   save(): void {}
   cancel(): void {}
-  removeItem(): void {
-    this.parent.removeItem(this);
-  }
-  deleteItem(): void {
-    this.parent.deleteItem(this);
-  }
+  removeItem(): void {}
+  deleteItem(): void {}
 }

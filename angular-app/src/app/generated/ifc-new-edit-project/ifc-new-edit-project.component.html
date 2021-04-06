@@ -3,26 +3,21 @@
     <div class="p-1">TOT <input [(ngModel)]="testing.isTot" type="checkbox"></div>
     <div class="p-1">UNI <input [(ngModel)]="testing.isUni" type="checkbox"></div>
 </div>
-<div class="container-fluid">
-    <app-box-form *ngIf="data" [data]="[data]" title="New/edit project" [crud]="testing.crud" [isUni]="testing.isUni" [isTot]="testing.isTot">
-        <app-box-form-row label="Name" [hideLabel]="false">
-            <app-leaf-alphanumeric [resource]="data" field="Name" [crud]="testing.crud" [isUni]="testing.isUni" [isTot]="testing.isTot"></app-leaf-alphanumeric>
-        </app-box-form-row>
-        <app-box-form-row label="Description">
-            <app-leaf-alphanumeric [resource]="data" field="Description" [crud]="testing.crud" [isUni]="testing.isUni" [isTot]="testing.isTot"></app-leaf-alphanumeric>
-        </app-box-form-row>
-        <app-box-form-row label="Start date"></app-box-form-row>
-        <app-box-form-row label="Active"></app-box-form-row>
-        <app-box-form-row label="Current PL"></app-box-form-row>
-        <app-box-form-row label="Project members"></app-box-form-row>
 
-        <!-- <div class="row">
-            <div class="col-12">
-                <pre>
-                    {{data | json}}
-                </pre>
-            </div>
-        </div> -->
+<div class="container-fluid">
+    <app-box-form #box *ngIf="data" [tgts]="[data]" title="New/edit project" [crud]="testing.crud" [isUni]="testing.isUni" [isTot]="testing.isTot">
+        <app-box-form-item *ngFor="let resource of [data]" [parent]="src" [resource]="resource" [showNavMenu]="false">
+            <app-box-form-row label="Name" [hideLabel]="false">
+                <app-leaf-alphanumeric [resource]="resource" field="Name" [crud]="testing.crud" [isUni]="testing.isUni" [isTot]="testing.isTot"></app-leaf-alphanumeric>
+            </app-box-form-row>
+            <app-box-form-row label="Description">
+                <app-leaf-alphanumeric [resource]="resource" field="Description" [crud]="testing.crud" [isUni]="testing.isUni" [isTot]="testing.isTot"></app-leaf-alphanumeric>
+            </app-box-form-row>
+            <app-box-form-row label="Start date"></app-box-form-row>
+            <app-box-form-row label="Active"></app-box-form-row>
+            <app-box-form-row label="Current PL"></app-box-form-row>
+            <app-box-form-row label="Project members"></app-box-form-row>
+        </app-box-form-item>
     </app-box-form>
 </div>
 

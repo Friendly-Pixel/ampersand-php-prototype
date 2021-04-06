@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { BoxFormItemComponent } from "../box-form-item/box-form-item.component";
-import { CRUDComponent } from "../crud-component.class";
+import { CRUDComponent } from "../models/crud-component.class";
+import { Resource } from "../models/resource.class";
+import { ResourceService } from "../resource.service";
 
 @Component({
   selector: "app-box-form",
@@ -15,9 +16,9 @@ export class BoxFormComponent extends CRUDComponent implements OnInit {
   @Input() public isUni = true;
   @Input() public isTot = false;
   @Input() public tgtConceptLabel: string;
-  @Input() public data: Array<object> = [];
+  @Input() public tgts: Array<Resource> = [];
 
-  constructor() {
+  constructor(protected svc: ResourceService) {
     super();
   }
 
@@ -28,6 +29,4 @@ export class BoxFormComponent extends CRUDComponent implements OnInit {
   }
 
   createItem(): void {}
-  removeItem(item: BoxFormItemComponent): void {}
-  deleteItem(item: BoxFormItemComponent): void {}
 }

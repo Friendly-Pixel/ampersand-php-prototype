@@ -1,23 +1,18 @@
 <ng-container *ngIf="isCrudR(); else nonReadBlock">
-    <div class="box box-rows" *ngIf="!hideOnNoRecords || data.length > 0">
+    <div class="box box-rows" *ngIf="!hideOnNoRecords || tgts.length > 0">
         <h4 *ngIf="showTitle()">{{title}}</h4>
         
-        <div *ngIf="isCrudC() && (!isUni || data.length === 0)" class="row">
+        <div *ngIf="isCrudC() && (!isUni || tgts.length === 0)" class="row">
             <div class="col-xs-12">
                 <button type="button" class="btn btn-sm btn-success" (click)="createItem()">New {{tgtConceptLabel}}</button>
             </div>
         </div>
 
         <ul class="list-group">
-            <li *ngFor="let resource of data" class="list-group-item"
-                [class]="{'list-group-item-warning' : item.status.warning, 'list-group-item-danger' : item.status.danger, 'list-group-item-success' : item.status.success}">
-                <app-box-form-item #item [showNavMenu]="showNavMenu" [parent]="this" [data]="resource">
-                    <ng-content></ng-content>
-                </app-box-form-item>
-            </li>
+            <ng-content></ng-content>
 
             <!-- Input to add new link to another resource -->
-            <li *ngIf="isCrudU() && (!isUni || data.length === 0)" class="list-group-item">
+            <li *ngIf="isCrudU() && (!isUni || tgts.length === 0)" class="list-group-item">
                 <!--
                 <div ng-init="getTypeahead('$target$')">
                     <input ng-model="selected.value" type="text" class="input-sm" placeholder="Add existing $target$" uib-typeahead="item._label_ for item in typeahead['$target$'] | filter:\$viewValue | limitTo:15" typeahead-editable="true" typeahead-on-select="typeaheadOnSelect(\$item, \$model, \$label, resource, '$name$', patchResource)" typeahead-no-results="hasNoResults">
