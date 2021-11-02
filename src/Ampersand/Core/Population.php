@@ -137,6 +137,30 @@ class Population
         return $this;
     }
 
+    /**
+     * @return \Ampersand\Core\Concept[]
+     */
+    public function getConcepts(): array
+    {
+        return array_values(
+            array_unique(
+                array_map(fn(Atom $atom) => $atom->concept, $this->atoms)
+            )
+        );
+    }
+
+    /**
+     * @return \Ampersand\Core\Relation[]
+     */
+    public function getRelations(): array
+    {
+        return array_values(
+            array_unique(
+                array_map(fn(Link $link) => $link->relation(), $this->links)
+            )
+        );
+    }
+
     protected function importAtoms(): void
     {
         $total = count($this->atoms);

@@ -1,8 +1,45 @@
 # Changelog
 
 ## Unreleased changes
+* [Issue 1208](https://github.com/AmpersandTarski/Ampersand/issues/1208) Fix warning when a reinstall of the database may be needed based on model hash
+* Use main branch instead of master
+* Update to Ampersand compiler version v4.4.3
+
+## v1.10.4 (16 sept 2021)
+* [Issue 1170](https://github.com/AmpersandTarski/Ampersand/issues/1170) Rename Concept::inSameClassificationTree to inSameClassificationBranch. Adapt error messages.
+* [Issue 1212](https://github.com/AmpersandTarski/Ampersand/issues/1212) Change database collation to utf8mb4_nopad_bin to fix issue with trailing whitespace
+* Update build-push to docker hub. We are moving to master branch only, no development anymore
+* Fix a warning in the devcontainer
+
+## v1.10.3 (14 aug 2021)
+* Bugfix issue with unhandled exception in frontend when API patch returns error
+* Bugfix redirect to previous url after navigating manually to login page
+
+## v1.10.2 (12 aug 2021)
+* [Issue 993](https://github.com/AmpersandTarski/Ampersand/issues/993) Don't call API to save field when value is unchanged
+* Provide more specific error message when file upload failed (e.g. exceeded maximum filesize)
+
+## v1.10.1 (14 jul 2021)
+* Library update indicated by dependabot
+* Add helper methods to Population class
+
+## v1.10.0 (14 may 2021)
+* Remove OAuth module. Should be implementated by applications that use the framework instead.
+* Remove frontend package from dist folder. Package is now build every time.
+* Update frontend dev libraries (npm update)
+* Update backend libraries (composer update)
+
+## v1.9.3 (14 apr 2021)
+* [Issue 1155](https://github.com/AmpersandTarski/Ampersand/issues/1155) Fix issue with MrgAtom exec-engine function in case of non-existing atoms
+* Hotfix bug introduced in v1.9.2 related to query data optimization
+
+## v1.9.2 (13 apr 2021)
+* Fix query data optimization in case of transformation from Atom to Resource. Improves performance by reducing amount of queries significantly.
+
+## v1.9.1 (1 apr 2021)
 * [Issue 1151](https://github.com/AmpersandTarski/Ampersand/issues/1151) Bugfix boolean population transformation to database
 * [Issue 1152](https://github.com/AmpersandTarski/Ampersand/issues/1152) Handle violation segments for expressions with multiple targets
+* Add OAuth2 handler for Microsoft accounts
 
 ## v1.9.0 (19 feb 2021)
 * [Issue 1103](https://github.com/AmpersandTarski/Ampersand/issues/1103) Adapt templates TABS and FORM: by default don't show 'hamburger' item to nav to other interfaces. Add template attribute 'showNavMenu'

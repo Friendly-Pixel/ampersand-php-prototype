@@ -7,6 +7,9 @@ use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Container;
+
+use function Ampersand\Misc\humanFileSize;
+use function Ampersand\Misc\returnBytes;
 use function Ampersand\Misc\stackTrace;
 use Ampersand\Exception\NotInstalledException;
 use Ampersand\Exception\SessionExpiredException;
@@ -202,7 +205,6 @@ require_once(__DIR__ . '/admin.installer.php'); // API calls starting with '/adm
 require_once(__DIR__ . '/admin.utils.php'); // API calls starting with '/admin/utils/'
 require_once(__DIR__ . '/app.php'); // API calls starting with '/app/'
 require_once(__DIR__ . '/files.php'); // API calls starting with '/file/'
-require_once(__DIR__ . '/oauthlogin.php'); // API calls starting with '/oauthlogin/'
 
 foreach ($ampersandApp->getSettings()->getExtensions() as $ext) {
     $ext->bootstrap();
@@ -274,7 +276,7 @@ $api->add(function (Request $req, Response $res, callable $next) {
             $route = $req->getAttribute('route');
             
             // If application installer API ROUTE is called, continue
-            if ($route->getName() === 'applicationInstaller') {
+            if (in_array($route->getName(), ['applicationInstaller', 'updateChecksum'], true)) {
                 return $next($req, $res);
             // Else navigate user to /admin/installer page
             } else {
@@ -321,6 +323,25 @@ $api->add(function (Request $req, Response $res, callable $next) {
     } catch (AtomNotFoundException $e) {
         throw new Exception($e->getMessage(), 404, $e); // Map to HTTP 404 - Resource not found
     }
+})
+// Add middleware to catch when post_max_size is exceeded
+/**
+ * @phan-closure-scope \Slim\Container
+ */
+->add(function (Request $req, Response $res, callable $next) {
+    // Only applies to POST requests with empty $_POST superglobal
+    // See: https://www.php.net/manual/en/ini.core.php#ini.post-max-size
+    if ($req->isPost() && empty($_POST)) {
+        // See if we can detect if post_max_size is exceeded
+        if (isset($_SERVER['CONTENT_LENGTH'])) {
+            $maxBytes = returnBytes(ini_get('post_max_size'));
+            if ($_SERVER['CONTENT_LENGTH'] > $maxBytes) {
+                throw new Exception("The request exceeds the maximum request size of " . humanFileSize($maxBytes), 400);
+            }
+        }
+    }
+
+    return $next($req, $res);
 })->run();
 
 $executionTime = round(microtime(true) - $scriptStartTime, 2);
