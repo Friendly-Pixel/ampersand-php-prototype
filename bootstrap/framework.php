@@ -17,8 +17,8 @@ use Ampersand\Plugs\MysqlDB\MysqlDB;
 use Cascade\Cascade;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
-use Slim\App;
-use Slim\Container;
+use Slim\Factory\AppFactory;
+use DI\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use function Ampersand\Misc\stackTrace;
@@ -144,7 +144,7 @@ $ampersandApp->setConjunctCache(new MysqlConjunctCache($mysqlDB));
  * API
  *************************************************************************************************/
 $apiContainer = new Container();
-$apiContainer['ampersand_app'] = $ampersandApp; // add AmpersandApp object to API DI-container
+$apiContainer->set('ampersand_app', $ampersandApp); // add AmpersandApp object to API DI-container
 
 // Custom NotFound handler when API path-method is not found
 // The AmpersandApp can also return a NotFoundException, this is handled by the errorHandler below
@@ -166,9 +166,9 @@ $apiContainer->get('settings')->replace(
     ]
 );
 
-// Create and configure Slim app (version 3.x)
-// TODO: migrate to Slim v4
-$api = new App($apiContainer);
+// Create and configure Slim app (version 4.x)
+$api = AppFactory::create();
+// $api = new App($apiContainer);
 
 foreach (glob(__DIR__ . '/api/*.php') as $filepath) {
     require_once($filepath);
