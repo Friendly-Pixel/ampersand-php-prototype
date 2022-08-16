@@ -160,15 +160,8 @@ $apiContainer['phpErrorHandler'] = function ($container) use ($ampersandApp) {
     return new PhpErrorHandler($ampersandApp);
 };
 
-$apiContainer->get('settings')->replace(
-    [ 'displayErrorDetails' => $ampersandApp->getSettings()->get('global.debugMode') // when true, additional information about exceptions are displayed by the default error handler
-    , 'determineRouteBeforeAppMiddleware' => true // the route is calculated before any middleware is executed. This means that you can inspect route parameters in middleware if you need to.
-    ]
-);
-
 // Create and configure Slim app (version 4.x)
 $api = AppFactory::create();
-// $api = new App($apiContainer);
 
 foreach (glob(__DIR__ . '/api/*.php') as $filepath) {
     require_once($filepath);
@@ -195,5 +188,17 @@ $api
 ->add(new InitAmpersandAppMiddleware($ampersandApp, $logger)) // initialize the AmpersandApp (PHASE-2) and Session (PHASE-3)
 ->add(new PostMaxSizeMiddleware()) // catch when post_max_size is exceeded
 ->add(new JsonRequestParserMiddleware()) // overwrite default media type parser for application/json
-->add(new LogPerformanceMiddleware($logger, 'TOTAL PERFORMANCE | ', $scriptStartTime)) // wrapper to log total performance
-->run();
+->add(new LogPerformanceMiddleware($logger, 'TOTAL PERFORMANCE | ', $scriptStartTime)); // wrapper to log total performance
+
+$api->addErrorMiddleware(
+    displayErrorDetails: $ampersandApp->getSettings()->get('global.debugMode'),
+    logErrors: true,
+    logErrorDetails: true,
+    logger: $logger
+);
+
+// Position Middleware\RoutingMiddleware here, just before calling run(),
+// to have route information available in other middleware
+$api->addRoutingMiddleware();
+
+$api->run();
