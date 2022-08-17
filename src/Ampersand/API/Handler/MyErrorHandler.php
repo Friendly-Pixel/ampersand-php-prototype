@@ -32,7 +32,17 @@ class MyErrorHandler implements ErrorHandlerInterface
         bool $logErrorDetails
     ): ResponseInterface {
         $this->displayErrorDetails = $displayErrorDetails;
+        $this->log($exception);
         return $this->renderResponse($exception);
+    }
+
+    protected function log(Throwable $e): void
+    {
+        if ($this->code >= 500) {
+            $this->logger->error(stackTrace($e)); // For internal server errors we want the stacktrace to understand what's happening
+        } else {
+            $this->logger->notice($e->getMessage()); // For user errors a notice of the exception message is sufficient
+        }
     }
 
     protected function renderResponse(Throwable $e, array $data = []): ResponseInterface
