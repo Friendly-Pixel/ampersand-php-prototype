@@ -8,9 +8,11 @@ use Ampersand\Exception\SessionExpiredException;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-class InitAmpersandAppMiddleware
+class InitAmpersandAppMiddleware implements MiddlewareInterface
 {
     protected AmpersandApp $app;
     protected LoggerInterface $logger;
@@ -21,7 +23,7 @@ class InitAmpersandAppMiddleware
         $this->logger = $logger;
     }
     
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $sessionIsResetFlag = false;
     
@@ -39,7 +41,7 @@ class InitAmpersandAppMiddleware
             
             // If application installer API ROUTE is called, continue
             if (in_array($route->getName(), ['applicationInstaller', 'updateChecksum'], true)) {
-                return $next($request, $response);
+                return $handler->handle($request);
             } else {
                 throw $e;
             }
@@ -51,7 +53,7 @@ class InitAmpersandAppMiddleware
         }
 
         try {
-            return $next($request, $response);
+            return $handler->handle($request);
         } catch (Exception $e) {
             // If an exception is thrown in the application after the session is automatically reset, it is probably caused by this session reset (e.g. logout)
             if ($sessionIsResetFlag) {

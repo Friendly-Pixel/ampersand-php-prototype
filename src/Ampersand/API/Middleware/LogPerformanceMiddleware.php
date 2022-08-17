@@ -4,9 +4,11 @@ namespace Ampersand\API\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 
-class LogPerformanceMiddleware
+class LogPerformanceMiddleware implements MiddlewareInterface
 {
     protected LoggerInterface $logger;
     protected string $prefix;
@@ -19,11 +21,11 @@ class LogPerformanceMiddleware
         $this->startTime = $startTime;
     }
 
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $startTime = $this->startTime ?? (float) microtime(true);
 
-        $response = $next($request, $response);
+        $response = $handler->handle($request);
 
         // Report performance until here
         $executionTime = round(microtime(true) - $startTime, 2);
@@ -33,5 +35,4 @@ class LogPerformanceMiddleware
 
         return $response;
     }
-
 }

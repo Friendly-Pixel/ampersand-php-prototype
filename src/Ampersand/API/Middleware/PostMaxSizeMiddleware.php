@@ -7,10 +7,12 @@ use function Ampersand\Misc\humanFileSize;
 use function Ampersand\Misc\returnBytes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class PostMaxSizeMiddleware
+class PostMaxSizeMiddleware implements MiddlewareInterface
 {
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         // Only applies to POST requests with empty $_POST superglobal
         // See: https://www.php.net/manual/en/ini.core.php#ini.post-max-size
@@ -24,6 +26,6 @@ class PostMaxSizeMiddleware
             }
         }
 
-        return $next($request, $response);
+        return $handler->handle($request);
     }
 }
