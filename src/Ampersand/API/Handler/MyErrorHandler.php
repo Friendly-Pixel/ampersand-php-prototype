@@ -14,6 +14,7 @@ use function Ampersand\Misc\stackTrace;
 
 class MyErrorHandler implements ErrorHandlerInterface
 {
+    protected Throwable $exception;
     protected int $code = 500;
     protected string $message = "An error occured. For more information see server log files";
     protected bool $displayErrorDetails = false;
@@ -36,8 +37,9 @@ class MyErrorHandler implements ErrorHandlerInterface
         bool $logErrors,
         bool $logErrorDetails
     ): ResponseInterface {
+        $this->exception = $exception;
         $this->displayErrorDetails = $displayErrorDetails;
-        $this->log($exception);
+        $this->log();
         return $this->renderResponse($exception);
     }
 
@@ -47,16 +49,16 @@ class MyErrorHandler implements ErrorHandlerInterface
         return $this->code < 100 || $this->code > 599 ? 500 : $this->code;
     }
 
-    protected function log(Throwable $e): void
+    protected function log(): void
     {
         if ($this->getCode() >= 500) {
-            $this->logger->error(stackTrace($e)); // For internal server errors we want the stacktrace to understand what's happening
+            $this->logger->error(stackTrace($this->exception)); // For internal server errors we want the stacktrace to understand what's happening
         } else {
-            $this->logger->notice($e->getMessage()); // For user errors a notice of the exception message is sufficient
+            $this->logger->notice($this->exception->getMessage()); // For user errors a notice of the exception message is sufficient
         }
     }
 
-    protected function renderResponse(Throwable $e): ResponseInterface
+    protected function renderResponse(): ResponseInterface
     {
         $response = $this->responseFactory->createResponse($this->getCode())
             ->withHeader('Content-type', 'application/json');
@@ -65,7 +67,7 @@ class MyErrorHandler implements ErrorHandlerInterface
             'error' => $this->getCode(),
             'msg' => $this->message,
             'notifications' => $this->app->userLog()->getAll(),
-            'html' => $this->displayErrorDetails ? stackTrace($e) : null,
+            'html' => $this->displayErrorDetails ? stackTrace($this->exception) : null,
             ...$this->data
         ];
 
