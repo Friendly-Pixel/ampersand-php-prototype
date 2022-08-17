@@ -1,6 +1,6 @@
 <?php
 
-namespace Ampersand\API\Handler;
+namespace Ampersand\API\ErrorHandler;
 
 use Ampersand\AmpersandApp;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -12,7 +12,7 @@ use Throwable;
 
 use function Ampersand\Misc\stackTrace;
 
-class MyErrorHandler implements ErrorHandlerInterface
+class GenericErrorHandler implements ErrorHandlerInterface
 {
     protected Throwable $exception;
     protected bool $displayErrorDetails = false;

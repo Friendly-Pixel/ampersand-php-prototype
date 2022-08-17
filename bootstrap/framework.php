@@ -1,7 +1,7 @@
 <?php
 
 use Ampersand\AmpersandApp;
-use Ampersand\API\Handler\MyErrorHandler;
+use Ampersand\API\ErrorHandler\GenericErrorHandler;
 use Ampersand\API\Middleware\InitAmpersandAppMiddleware;
 use Ampersand\API\Middleware\JsonRequestParserMiddleware;
 use Ampersand\API\Middleware\LogPerformanceMiddleware;
@@ -181,7 +181,7 @@ $errorMiddleware = $api->addErrorMiddleware(
     logErrorDetails: true,
     logger: $logger
 );
-$myErrorHandler = new MyErrorHandler($ampersandApp, $api->getResponseFactory(), $logger);
+$myErrorHandler = new GenericErrorHandler($ampersandApp, $api->getResponseFactory(), $logger);
 $errorMiddleware->setDefaultErrorHandler($myErrorHandler);
 
 // Position Middleware\RoutingMiddleware here, just before calling run(),
