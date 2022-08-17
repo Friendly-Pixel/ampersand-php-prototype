@@ -173,12 +173,19 @@ $logger = Logger::getLogger('API');
 $api
 ->add(new LogPerformanceMiddleware($logger, 'PHASE-4 REQUEST | ')) // wrapper to log performance of request phase (PHASE-4)
 ->add(new InitAmpersandAppMiddleware($ampersandApp, $logger)) // initialize the AmpersandApp (PHASE-2) and Session (PHASE-3)
-->add(new PostMaxSizeMiddleware()) // catch when post_max_size is exceeded
-->add(new JsonRequestParserMiddleware()) // overwrite default media type parser for application/json
-->add(new LogPerformanceMiddleware($logger, 'TOTAL PERFORMANCE | ', $scriptStartTime)); // wrapper to log total performance
+->add(new PostMaxSizeMiddleware()); // catch when post_max_size is exceeded
+
+// Body parsing middleware allows to work with JSON and XML body directly in request handling
+$api->addBodyParsingMiddleware(
+    [ 'application/json' => new JsonRequestParserMiddleware(), // overwrite default media type parser for application/json
+    ]
+);
 
 // Position Middleware\RoutingMiddleware here, just before calling run() to have route information available in other middleware
 $api->addRoutingMiddleware();
+
+// Wrapper to log total performance
+$api->add(new LogPerformanceMiddleware($logger, 'TOTAL PERFORMANCE | ', $scriptStartTime));
 
 $errorMiddleware = $api->addErrorMiddleware(
     displayErrorDetails: $ampersandApp->getSettings()->get('global.debugMode'),
