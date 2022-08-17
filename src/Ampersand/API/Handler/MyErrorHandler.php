@@ -15,14 +15,7 @@ use function Ampersand\Misc\stackTrace;
 class MyErrorHandler implements ErrorHandlerInterface
 {
     protected Throwable $exception;
-    protected int $code = 500;
-    protected string $message = "An error occured. For more information see server log files";
     protected bool $displayErrorDetails = false;
-
-    /**
-     * Array for error context related data
-     */
-    protected array $data = [];
 
     public function __construct(
         protected AmpersandApp $app,
@@ -45,8 +38,17 @@ class MyErrorHandler implements ErrorHandlerInterface
 
     protected function getCode(): int
     {
-        // Convert invalid HTTP status code to 500
-        return $this->code < 100 || $this->code > 599 ? 500 : $this->code;
+        return 500;
+    }
+
+    protected function getMessage(): string
+    {
+        return $this->exception->getMessage();
+    }
+
+    protected function getContextData(): array
+    {
+        return [];
     }
 
     protected function log(): void
@@ -60,15 +62,15 @@ class MyErrorHandler implements ErrorHandlerInterface
 
     protected function renderResponse(): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse($this->getCode())
+        $response = $this->responseFactory->createResponse($this->validHttpResponseCode($this->getCode()))
             ->withHeader('Content-type', 'application/json');
 
         $body = [
             'error' => $this->getCode(),
-            'msg' => $this->message,
+            'msg' => $this->displayErrorDetails ? $this->getMessage() : "An error occured. For more information see server log files",
             'notifications' => $this->app->userLog()->getAll(),
             'html' => $this->displayErrorDetails ? stackTrace($this->exception) : null,
-            ...$this->data
+            ...$this->getContextData(),
         ];
 
         $response->getBody()->write(
@@ -76,5 +78,11 @@ class MyErrorHandler implements ErrorHandlerInterface
         );
 
         return $response;
+    }
+
+    protected function validHttpResponseCode(int $code): int
+    {
+        // Convert invalid HTTP status code to 500
+        return $code < 100 || $code > 599 ? 500 : $code;
     }
 }
