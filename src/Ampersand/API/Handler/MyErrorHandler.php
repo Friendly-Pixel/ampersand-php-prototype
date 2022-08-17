@@ -36,9 +36,15 @@ class MyErrorHandler implements ErrorHandlerInterface
         return $this->renderResponse($exception);
     }
 
+    protected function getCode(): int
+    {
+        // Convert invalid HTTP status code to 500
+        return $this->code < 100 || $this->code > 599 ? 500 : $this->code;
+    }
+
     protected function log(Throwable $e): void
     {
-        if ($this->code >= 500) {
+        if ($this->getCode() >= 500) {
             $this->logger->error(stackTrace($e)); // For internal server errors we want the stacktrace to understand what's happening
         } else {
             $this->logger->notice($e->getMessage()); // For user errors a notice of the exception message is sufficient
@@ -47,11 +53,11 @@ class MyErrorHandler implements ErrorHandlerInterface
 
     protected function renderResponse(Throwable $e, array $data = []): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse($this->code)
+        $response = $this->responseFactory->createResponse($this->getCode())
             ->withHeader('Content-type', 'application/json');
 
         $body = [
-            'error' => $this->code,
+            'error' => $this->getCode(),
             'msg' => $this->message,
             'notifications' => $this->app->userLog()->getAll(),
             'html' => $this->displayErrorDetails ? stackTrace($e) : null,
