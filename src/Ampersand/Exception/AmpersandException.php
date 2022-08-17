@@ -20,7 +20,7 @@ class AmpersandException extends Exception implements HttpExceptionInterface
         return $this->getMessage();
     }
 
-    public function getContextData(AmpersandApp $app): array
+    public function getContextData(AmpersandApp $app, bool $displayErrorDetails): array
     {
         return [];
     }

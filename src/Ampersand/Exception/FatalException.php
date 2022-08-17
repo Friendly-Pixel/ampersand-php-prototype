@@ -2,6 +2,7 @@
 
 namespace Ampersand\Exception;
 
+use Ampersand\AmpersandApp;
 use Ampersand\Exception\AmpersandException;
 
 /**
@@ -11,4 +12,10 @@ use Ampersand\Exception\AmpersandException;
  */
 class FatalException extends AmpersandException
 {
+    protected int $httpCode = 500;
+
+    public function getHttpMessage(AmpersandApp $app): string
+    {
+        return "A fatal exception occured. Please report the full stacktrace to the Ampersand development team on Github: {$this->getMessage()}";
+    }
 }

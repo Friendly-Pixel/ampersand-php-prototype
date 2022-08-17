@@ -6,6 +6,8 @@ use Ampersand\Exception\AmpersandException;
 
 class UploadException extends AmpersandException
 {
+    protected int $httpCode;
+
     /**
      * Instantiate UploadException based on php's upload error codes
      *
@@ -47,6 +49,8 @@ class UploadException extends AmpersandException
                 $code = 500; // 500 = Server error
                 break;
         }
+        
+        $this->httpCode = $code;
         
         parent::__construct($message, $code);
     }

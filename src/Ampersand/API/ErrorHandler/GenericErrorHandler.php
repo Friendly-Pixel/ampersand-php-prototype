@@ -78,7 +78,7 @@ class GenericErrorHandler implements ErrorHandlerInterface
     protected function getContextData(): array
     {
         if ($this->exception instanceof HttpExceptionInterface) {
-            return $this->exception->getContextData($this->app);
+            return $this->exception->getContextData($this->app, $this->displayErrorDetails);
         }
         
         return [];

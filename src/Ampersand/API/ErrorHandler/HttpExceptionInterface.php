@@ -8,5 +8,5 @@ interface HttpExceptionInterface
 {
     public function getHttpCode(AmpersandApp $app): int;
     public function getHttpMessage(AmpersandApp $app): string;
-    public function getContextData(AmpersandApp $app): array;
+    public function getContextData(AmpersandApp $app, bool $displayErrorDetails): array;
 }
