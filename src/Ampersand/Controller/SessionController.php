@@ -2,25 +2,25 @@
 
 namespace Ampersand\Controller;
 
-use Slim\Http\Request;
-use Slim\Http\Response;
 use Ampersand\Frontend\MenuType;
 use Ampersand\Session;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class SessionController extends AbstractController
 {
-    public function updateRoles(Request $request, Response $response, array $args): Response
+    public function updateRoles(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->app->setActiveRoles((array) $request->getParsedBody());
         
-        return $response->withJson(
+        return $this->withJson(
             $this->app->getSessionRoles(),
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function getNavMenu(Request $request, Response $response, array $args): Response
+    public function getNavMenu(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->app->checkProcessRules();
         
@@ -49,19 +49,19 @@ class SessionController extends AbstractController
                     ,'sessionVars' => $session->getSessionVars()
                     ];
         
-        return $response->withJson(
+        return $this->withJson(
             $content,
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function getNotifications(Request $request, Response $response, array $args): Response
+    public function getNotifications(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         return $this->success($response);
     }
 
-    public function deleteExpiredSessions(Request $request, Response $response, array $args): Response
+    public function deleteExpiredSessions(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->requireAdminRole();
         

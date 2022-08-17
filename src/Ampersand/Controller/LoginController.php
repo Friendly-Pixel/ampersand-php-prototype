@@ -4,12 +4,12 @@ namespace Ampersand\Controller;
 
 use Ampersand\Exception\AmpersandException;
 use Ampersand\Exception\BadRequestException;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class LoginController extends AbstractController
 {
-    public function loginTest(Request $request, Response $response, array $args): Response
+    public function loginTest(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->preventProductionMode();
 

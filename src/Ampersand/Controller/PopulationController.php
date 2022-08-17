@@ -8,14 +8,14 @@ use Ampersand\Exception\BadRequestException;
 use Ampersand\Exception\UploadException;
 use Ampersand\IO\ExcelImporter;
 use Ampersand\Log\Logger;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
 class PopulationController extends AbstractController
 {
-    public function importPopulationFromUpload(Request $request, Response $response, array $args): Response
+    public function importPopulationFromUpload(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // Check for required role
         if (!$this->app->hasRole($this->app->getSettings()->get('rbac.importerRoles'))) {
@@ -62,7 +62,7 @@ class PopulationController extends AbstractController
         // Check all process rules that are relevant for the activate roles
         $this->app->checkProcessRules();
 
-        return $response->withJson(
+        return $this->withJson(
             [ 'files'                 => $_FILES
             , 'notifications'         => $this->app->userLog()->getAll()
             , 'invariantRulesHold'    => $transaction->invariantRulesHold()
@@ -70,11 +70,11 @@ class PopulationController extends AbstractController
             , 'sessionRefreshAdvice'  => $this->frontend->getSessionRefreshAdvice()
             ],
             $transaction->isCommitted() ? 200 : 400, // 400 'Bad request' is used to trigger error in file uploader interface
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function exportAllPopulation(Request $request, Response $response, array $args): Response
+    public function exportAllPopulation(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->preventProductionMode();
         $this->requireAdminRole();
@@ -92,13 +92,13 @@ class PopulationController extends AbstractController
                         ->withHeader('Content-Type', 'application/json;charset=utf-8');
     }
 
-    public function exportSelectionOfPopulation(Request $request, Response $response, array $args): Response
+    public function exportSelectionOfPopulation(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->preventProductionMode();
         $this->requireAdminRole();
         
         // Process input
-        $body = $request->reparseBody()->getParsedBody();
+        $body = $request->getParsedBody();
         $model = $this->app->getModel();
         
         $concepts = array_map(function (string $conceptLabel) use ($model) {

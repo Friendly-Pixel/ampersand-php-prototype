@@ -4,12 +4,12 @@ namespace Ampersand\Controller;
 
 use Ampersand\Exception\AccessDeniedException;
 use Ampersand\Rule\RuleEngine;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class RuleEngineController extends AbstractController
 {
-    public function evaluateAllRules(Request $request, Response $response, array $args): Response
+    public function evaluateAllRules(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // Check for required role
         $allowedRoles = $this->app->getSettings()->get('rbac.adminRoles');
@@ -29,10 +29,10 @@ class RuleEngineController extends AbstractController
             $this->app->userLog()->signal($violation);
         }
         
-        return $response->withJson(
+        return $this->withJson(
             $this->app->userLog()->getAll(),
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 }

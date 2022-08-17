@@ -4,8 +4,8 @@ namespace Ampersand\Controller;
 
 use Ampersand\IO\RDFGraph;
 use Ampersand\Misc\Reporter;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
@@ -17,12 +17,12 @@ class ReportController extends AbstractController
         $this->requireAdminRole();
     }
 
-    public function exportMetaModel(Request $request, Response $response, array $args): Response
+    public function exportMetaModel(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
         // Content negotiation
-        $acceptHeader = $request->getParam('format') ?? $request->getHeaderLine('Accept');
+        $acceptHeader = $request->getQueryParams()['format'] ?? $request->getHeaderLine('Accept');
         $rdfFormat = RDFGraph::getResponseFormat($acceptHeader);
 
         $graph = new RDFGraph($this->app->getModel(), $this->app->getSettings());
@@ -31,19 +31,21 @@ class ReportController extends AbstractController
         $mimetype = $rdfFormat->getDefaultMimeType();
         switch ($mimetype) {
             case 'text/html':
-                return $response->withHeader('Content-Type', 'text/html')->write($graph->dump('html'));
+                $response->getBody()->write($graph->dump('html'));
+                return $response->withHeader('Content-Type', 'text/html');
             case 'text/plain':
-                return $response->withHeader('Content-Type', 'text/plain')->write($graph->dump('text'));
+                $response->getBody()->write($graph->dump('text'));
+                return $response->withHeader('Content-Type', 'text/plain');
             default:
                 $filename = $this->app->getName() . "_meta-model_" . date('Y-m-d\TH-i-s') . "." . $rdfFormat->getDefaultExtension();
+                $response->getBody()->write($graph->serialise($rdfFormat));
                 return $response
                     ->withHeader('Content-Type', $rdfFormat->getDefaultMimeType())
-                    ->withHeader('Content-Disposition', "attachment; filename=\"{$filename}\"")
-                    ->write($graph->serialise($rdfFormat));
+                    ->withHeader('Content-Disposition', "attachment; filename=\"{$filename}\"");
         }
     }
 
-    public function reportRelations(Request $request, Response $response, array $args): Response
+    public function reportRelations(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
@@ -55,7 +57,7 @@ class ReportController extends AbstractController
         return $response->withHeader('Content-Type', 'application/json;charset=utf-8');
     }
 
-    public function conjunctUsage(Request $request, Response $response, array $args): Response
+    public function conjunctUsage(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
@@ -67,7 +69,7 @@ class ReportController extends AbstractController
         return $response->withHeader('Content-Type', 'application/json;charset=utf-8');
     }
 
-    public function conjunctPerformance(Request $request, Response $response, array $args): Response
+    public function conjunctPerformance(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
@@ -81,12 +83,12 @@ class ReportController extends AbstractController
                         ->withHeader('Content-Type', 'text/csv; charset=utf-8');
     }
 
-    public function interfaces(Request $request, Response $response, array $args): Response
+    public function interfaces(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
         // Input
-        $details = $request->getQueryParam('details', false);
+        $details = $request->getQueryParams()['details'] ?? false;
 
         // Get report
         $reporter = new Reporter(new CsvEncoder(';', '"'), $response->getBody());
@@ -102,7 +104,7 @@ class ReportController extends AbstractController
                         ->withHeader('Content-Type', 'text/csv; charset=utf-8');
     }
 
-    public function interfaceIssues(Request $request, Response $response, array $args): Response
+    public function interfaceIssues(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
         

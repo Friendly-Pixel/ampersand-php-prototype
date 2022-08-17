@@ -4,11 +4,11 @@ namespace Ampersand\Controller;
 
 use Ampersand\Exception\AccessDeniedException;
 use Ampersand\Exception\MetaModelException;
-use Slim\Http\Request;
-use Slim\Http\Response;
 use Ampersand\Misc\Installer;
 use Ampersand\Log\Logger;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class InstallerController extends AbstractController
 {
@@ -28,14 +28,14 @@ class InstallerController extends AbstractController
         }
     }
 
-    public function install(Request $request, Response $response, array $args): Response
+    public function install(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // $this->guard(); // skip generic access control check
 
         $this->preventProductionMode(); // Reinstalling the whole application is not allowed in production environment
         
-        $defaultPop = filter_var($request->getQueryParam('defaultPop'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
-        $ignoreInvariantRules = filter_var($request->getQueryParam('ignoreInvariantRules'), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
+        $defaultPop = filter_var($request->getQueryParams()['defaultPop'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
+        $ignoreInvariantRules = filter_var($request->getQueryParams()['ignoreInvariantRules'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
 
         $this->app
             ->reinstall($defaultPop, $ignoreInvariantRules) // reinstall and initialize application
@@ -44,7 +44,7 @@ class InstallerController extends AbstractController
         return $this->success($response);
     }
 
-    public function installMetaPopulation(Request $request, Response $response, array $args): Response
+    public function installMetaPopulation(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
@@ -60,7 +60,7 @@ class InstallerController extends AbstractController
         return $this->success($response);
     }
 
-    public function installNavmenu(Request $request, Response $response, array $args): Response
+    public function installNavmenu(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
@@ -76,7 +76,7 @@ class InstallerController extends AbstractController
         return $this->success($response);
     }
 
-    public function cleanupMetaPopulation(Request $request, Response $response, array $args): Response
+    public function cleanupMetaPopulation(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
 
@@ -89,7 +89,7 @@ class InstallerController extends AbstractController
         return $this->success($response);
     }
 
-    public function updateChecksum(Request $request, Response $response, array $args): Response
+    public function updateChecksum(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->guard();
         

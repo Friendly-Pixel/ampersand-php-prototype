@@ -6,7 +6,7 @@ use Ampersand\AmpersandApp;
 use Ampersand\Exception\AccessDeniedException;
 use Ampersand\Frontend\FrontendInterface;
 use Psr\Container\ContainerInterface;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class AbstractController
 {
@@ -23,15 +23,26 @@ abstract class AbstractController
         $this->frontend = $this->app->frontend();
     }
 
-    protected function success(Response $response): Response
+    protected function withJson(mixed $data, int $code, ResponseInterface $response): ResponseInterface
+    {
+        $response->getBody()->write(
+            json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
+
+        return $response
+          ->withHeader('Content-Type', 'application/json')
+          ->withStatus($code);
+    }
+
+    protected function success(ResponseInterface $response): ResponseInterface
     {
         // Check all process rules that are relevant for the activate roles
         $this->app->checkProcessRules();
 
-        return $response->withJson(
+        return $this->withJson(
             $this->app->userLog()->getAll(), // Return all notifications
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 

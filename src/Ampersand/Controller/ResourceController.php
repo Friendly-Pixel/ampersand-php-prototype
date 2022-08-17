@@ -12,12 +12,12 @@ use Ampersand\Interfacing\Options;
 use Ampersand\Interfacing\ResourceList;
 use Ampersand\Interfacing\ResourcePath;
 use Ampersand\Misc\ProtoContext;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ResourceController extends AbstractController
 {
-    public function listResourceTypes(Request $request, Response $response, array $args): Response
+    public function listResourceTypes(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->requireAdminRole();
         
@@ -29,60 +29,60 @@ class ResourceController extends AbstractController
             }))
         );
         
-        return $response->withJson($content, 200, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        return $this->withJson($content, 200, $response);
     }
 
-    public function getAllResourcesForType(Request $request, Response $response, array $args): Response
+    public function getAllResourcesForType(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // TODO: refactor when resources (e.g. for update field in UI) can be requested with interface definition
         $resources = ResourceList::makeWithoutInterface($this->app->getModel()->getConcept($args['resourceType']));
         
-        return $response->withJson(
+        return $this->withJson(
             $resources->get(),
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function createNewResourceId(Request $request, Response $response, array $args): Response
+    public function createNewResourceId(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $resource = ResourceList::makeWithoutInterface($this->app->getModel()->getConcept($args['resourceType']))->post();
         
         // Don't save/commit new resource (yet)
         // Transaction is not closed
 
-        return $response->withJson(
+        return $this->withJson(
             ['_id_' => $resource->getId()],
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function getResource(Request $request, Response $response, array $args): Response
+    public function getResource(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // Input
         $pathList = ResourcePath::makePathList($args['resourcePath']);
         $options = Options::getFromRequestParams($request->getQueryParams());
-        $depth = $request->getQueryParam('depth');
+        $depth = $request->getQueryParams()['depth'] ?? null;
 
         // Prepare
         $resource = ResourceList::makeWithoutInterface($this->app->getModel()->getConcept($args['resourceType']))->one($args['resourceId']);
 
         // Output
-        return $response->withJson(
+        return $this->withJson(
             $resource->walkPath($pathList)->get($options, $depth),
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function putPatchPostResource(Request $request, Response $response, array $args): Response
+    public function putPatchPostResource(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // Input
         $pathList = ResourcePath::makePathList($args['ifcPath']);
         $options = Options::getFromRequestParams($request->getQueryParams());
-        $depth = $request->getQueryParam('depth');
-        $body = $request->reparseBody()->getParsedBody();
+        $depth = $request->getQueryParams()['depth'] ?? null;
+        $body = $request->getParsedBody();
 
         // Prepare
         $transaction = $this->app->newTransaction();
@@ -124,7 +124,7 @@ class ResourceController extends AbstractController
         $this->app->checkProcessRules(); // Check all process rules that are relevant for the activate roles
 
         // Output
-        return $response->withJson(
+        return $this->withJson(
             [ 'content'               => $content
             , 'patches'               => $request->getMethod() === 'PATCH' ? $body : []
             , 'notifications'         => $this->app->userLog()->getAll()
@@ -134,11 +134,11 @@ class ResourceController extends AbstractController
             , 'navTo'                 => $this->frontend->getNavToResponse($transaction->isCommitted() ? 'COMMIT' : 'ROLLBACK')
             ],
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function deleteResource(Request $request, Response $response, array $args): Response
+    public function deleteResource(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // Input
         $pathList = ResourcePath::makePathList($args['ifcPath']);
@@ -159,7 +159,7 @@ class ResourceController extends AbstractController
         $this->app->checkProcessRules(); // Check all process rules that are relevant for the activate roles
         
         // Return result
-        return $response->withJson(
+        return $this->withJson(
             [ 'notifications'         => $this->app->userLog()->getAll()
             , 'invariantRulesHold'    => $transaction->invariantRulesHold()
             , 'isCommitted'           => $transaction->isCommitted()
@@ -167,11 +167,11 @@ class ResourceController extends AbstractController
             , 'navTo'                 => $this->frontend->getNavToResponse($transaction->isCommitted() ? 'COMMIT' : 'ROLLBACK')
             ],
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function renameAtoms(Request $request, Response $response, array $args): Response
+    public function renameAtoms(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->requireAdminRole();
         
@@ -180,7 +180,7 @@ class ResourceController extends AbstractController
             throw new ConceptNotDefined("Resource type '{$resourceType}' not found");
         }
         
-        $list = $request->reparseBody()->getParsedBody();
+        $list = $request->getParsedBody();
         if (!is_array($list)) {
             throw new BadRequestException("Body must be array. Non-array provided");
         }
@@ -194,20 +194,20 @@ class ResourceController extends AbstractController
         
         $transaction->runExecEngine()->close();
 
-        return $response->withJson(
+        return $this->withJson(
             $list,
             200,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $response
         );
     }
 
-    public function regenerateAtomIds(Request $request, Response $response, array $args): Response
+    public function regenerateAtomIds(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->requireAdminRole();
         
         // Input
         $cptName = isset($args['concept']) ? $args['concept'] : null;
-        $prefix = $request->getQueryParam('prefix');
+        $prefix = $request->getQueryParams()['prefix'] ?? null;
         $prefixWithConceptName = is_null($prefix) ? null : filter_var($prefix, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         // Determine which concepts to regenerate atom ids

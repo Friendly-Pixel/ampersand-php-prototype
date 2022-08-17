@@ -3,12 +3,12 @@
 namespace Ampersand\Controller;
 
 use Ampersand\Exception\AccessDeniedException;
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ExecEngineController extends AbstractController
 {
-    public function run(Request $request, Response $response, array $args): Response
+    public function run(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         // Check for required role
         $allowedRoles = $this->app->getSettings()->get('rbac.adminRoles');

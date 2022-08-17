@@ -3,13 +3,13 @@
 namespace Ampersand\Controller;
 
 use Ampersand\Exception\NotFoundException;
-use Slim\Http\Request;
-use Slim\Http\Response;
-use Slim\Http\Stream;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Psr7\Stream;
 
 class FileObjectController extends AbstractController
 {
-    public function getFile(Request $request, Response $response, array $args): Response
+    public function getFile(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $fs = $this->app->fileSystem();
         $filePath = $args['filePath'];
