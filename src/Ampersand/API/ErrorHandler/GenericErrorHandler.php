@@ -56,6 +56,25 @@ class GenericErrorHandler implements ErrorHandlerInterface
         return $this->exception->getMessage();
     }
 
+    protected function getUserMessage(): string
+    {
+        // If displayErrorDetails is set to true, the user may see the full details of the exception message
+        if ($this->displayErrorDetails) {
+            return $this->getMessage();
+        }
+
+        // If http code is defined AND not an internal server error, the user may see the full details
+        // e.g. a 400 Bad Request exception can contain information for the user about what is wrong with the request
+        if ($this->exception instanceof HttpExceptionInterface
+            && $this->exception->getHttpCode($this->app) < 500
+        ) {
+            return $this->getMessage();
+        }
+
+        // Else, hide exception message from user
+        return "An error occured. For more information see server log files";
+    }
+
     protected function getContextData(): array
     {
         if ($this->exception instanceof HttpExceptionInterface) {
@@ -81,7 +100,7 @@ class GenericErrorHandler implements ErrorHandlerInterface
 
         $body = [
             'error' => $this->getCode(),
-            'msg' => $this->displayErrorDetails ? $this->getMessage() : "An error occured. For more information see server log files",
+            'msg' => $this->getUserMessage(),
             'notifications' => $this->app->userLog()->getAll(),
             'html' => $this->displayErrorDetails ? stackTrace($this->exception) : null,
             ...$this->getContextData(),
