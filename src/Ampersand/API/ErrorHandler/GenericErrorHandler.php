@@ -40,16 +40,28 @@ class GenericErrorHandler implements ErrorHandlerInterface
 
     protected function getCode(): int
     {
+        if ($this->exception instanceof HttpExceptionInterface) {
+            return $this->exception->getHttpCode($this->app);
+        }
+
         return 500;
     }
 
     protected function getMessage(): string
     {
+        if ($this->exception instanceof HttpExceptionInterface) {
+            return $this->exception->getHttpMessage($this->app);
+        }
+
         return $this->exception->getMessage();
     }
 
     protected function getContextData(): array
     {
+        if ($this->exception instanceof HttpExceptionInterface) {
+            return $this->exception->getContextData($this->app);
+        }
+        
         return [];
     }
 
