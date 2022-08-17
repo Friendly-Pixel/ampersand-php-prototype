@@ -14,6 +14,7 @@ use function Ampersand\Misc\stackTrace;
 
 class GenericErrorHandler implements ErrorHandlerInterface
 {
+    protected ServerRequestInterface $request;
     protected Throwable $exception;
     protected bool $displayErrorDetails = false;
 
@@ -30,6 +31,7 @@ class GenericErrorHandler implements ErrorHandlerInterface
         bool $logErrors,
         bool $logErrorDetails
     ): ResponseInterface {
+        $this->request = $request;
         $this->exception = $exception;
         $this->displayErrorDetails = $displayErrorDetails;
         $this->log();
