@@ -1,9 +1,7 @@
 <?php
 
 use Ampersand\AmpersandApp;
-use Ampersand\API\Handler\ExceptionHandler;
-use Ampersand\API\Handler\NotFoundHandler;
-use Ampersand\API\Handler\PhpErrorHandler;
+use Ampersand\API\Handler\MyErrorHandler;
 use Ampersand\API\Middleware\InitAmpersandAppMiddleware;
 use Ampersand\API\Middleware\JsonRequestParserMiddleware;
 use Ampersand\API\Middleware\LogPerformanceMiddleware;
@@ -146,20 +144,6 @@ $ampersandApp->setConjunctCache(new MysqlConjunctCache($mysqlDB));
 $apiContainer = new Container();
 $apiContainer->set('ampersand_app', $ampersandApp); // add AmpersandApp object to API DI-container
 
-// Custom NotFound handler when API path-method is not found
-// The AmpersandApp can also return a NotFoundException, this is handled by the errorHandler below
-$apiContainer['notFoundHandler'] = function ($container) {
-    return new NotFoundHandler();
-};
-
-$apiContainer['errorHandler'] = function ($container) use ($ampersandApp) {
-    return new ExceptionHandler($ampersandApp);
-};
-
-$apiContainer['phpErrorHandler'] = function ($container) use ($ampersandApp) {
-    return new PhpErrorHandler($ampersandApp);
-};
-
 // Create and configure Slim app (version 4.x)
 $api = AppFactory::create();
 $api->setBasePath('/api/v1');
@@ -191,12 +175,14 @@ $api
 ->add(new JsonRequestParserMiddleware()) // overwrite default media type parser for application/json
 ->add(new LogPerformanceMiddleware($logger, 'TOTAL PERFORMANCE | ', $scriptStartTime)); // wrapper to log total performance
 
-$api->addErrorMiddleware(
+$errorMiddleware = $api->addErrorMiddleware(
     displayErrorDetails: $ampersandApp->getSettings()->get('global.debugMode'),
     logErrors: true,
     logErrorDetails: true,
     logger: $logger
 );
+$myErrorHandler = new MyErrorHandler($ampersandApp, $api->getResponseFactory(), $logger);
+$errorMiddleware->setDefaultErrorHandler($myErrorHandler);
 
 // Position Middleware\RoutingMiddleware here, just before calling run(),
 // to have route information available in other middleware
