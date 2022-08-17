@@ -18,6 +18,11 @@ class MyErrorHandler implements ErrorHandlerInterface
     protected string $message = "An error occured. For more information see server log files";
     protected bool $displayErrorDetails = false;
 
+    /**
+     * Array for error context related data
+     */
+    protected array $data = [];
+
     public function __construct(
         protected AmpersandApp $app,
         protected ResponseFactoryInterface $responseFactory,
@@ -51,7 +56,7 @@ class MyErrorHandler implements ErrorHandlerInterface
         }
     }
 
-    protected function renderResponse(Throwable $e, array $data = []): ResponseInterface
+    protected function renderResponse(Throwable $e): ResponseInterface
     {
         $response = $this->responseFactory->createResponse($this->getCode())
             ->withHeader('Content-type', 'application/json');
@@ -61,7 +66,7 @@ class MyErrorHandler implements ErrorHandlerInterface
             'msg' => $this->message,
             'notifications' => $this->app->userLog()->getAll(),
             'html' => $this->displayErrorDetails ? stackTrace($e) : null,
-            ...$data
+            ...$this->data
         ];
 
         $response->getBody()->write(
