@@ -162,6 +162,7 @@ $apiContainer['phpErrorHandler'] = function ($container) use ($ampersandApp) {
 
 // Create and configure Slim app (version 4.x)
 $api = AppFactory::create();
+$api->setBasePath('/api/v1');
 
 foreach (glob(__DIR__ . '/api/*.php') as $filepath) {
     require_once($filepath);
