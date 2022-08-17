@@ -10,8 +10,14 @@ use Psr\Log\LoggerInterface;
 use Slim\Interfaces\ErrorHandlerInterface;
 use Throwable;
 
+use function Ampersand\Misc\stackTrace;
+
 class MyErrorHandler implements ErrorHandlerInterface
 {
+    protected int $code = 500;
+    protected string $message = "An error occured. For more information see server log files";
+    protected bool $displayErrorDetails = false;
+
     public function __construct(
         protected AmpersandApp $app,
         protected ResponseFactoryInterface $responseFactory,
@@ -25,6 +31,27 @@ class MyErrorHandler implements ErrorHandlerInterface
         bool $logErrors,
         bool $logErrorDetails
     ): ResponseInterface {
-        return $response = $this->responseFactory->createResponse(500);
+        $this->displayErrorDetails = $displayErrorDetails;
+        return $this->renderResponse($exception);
+    }
+
+    protected function renderResponse(Throwable $e, array $data = []): ResponseInterface
+    {
+        $response = $this->responseFactory->createResponse($this->code)
+            ->withHeader('Content-type', 'application/json');
+
+        $body = [
+            'error' => $this->code,
+            'msg' => $this->message,
+            'notifications' => $this->app->userLog()->getAll(),
+            'html' => $this->displayErrorDetails ? stackTrace($e) : null,
+            ...$data
+        ];
+
+        $response->getBody()->write(
+            (string) json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+        );
+
+        return $response;
     }
 }
