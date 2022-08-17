@@ -35,7 +35,7 @@ class GenericErrorHandler implements ErrorHandlerInterface
         $this->exception = $exception;
         $this->displayErrorDetails = $displayErrorDetails;
         $this->log();
-        return $this->renderResponse($exception);
+        return $this->renderResponse();
     }
 
     protected function getCode(): int
