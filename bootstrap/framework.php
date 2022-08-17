@@ -177,6 +177,9 @@ $api
 ->add(new JsonRequestParserMiddleware()) // overwrite default media type parser for application/json
 ->add(new LogPerformanceMiddleware($logger, 'TOTAL PERFORMANCE | ', $scriptStartTime)); // wrapper to log total performance
 
+// Position Middleware\RoutingMiddleware here, just before calling run() to have route information available in other middleware
+$api->addRoutingMiddleware();
+
 $errorMiddleware = $api->addErrorMiddleware(
     displayErrorDetails: $ampersandApp->getSettings()->get('global.debugMode'),
     logErrors: true,
@@ -186,9 +189,5 @@ $errorMiddleware = $api->addErrorMiddleware(
 $myErrorHandler = new GenericErrorHandler($ampersandApp, $api->getResponseFactory(), $logger);
 $errorMiddleware->setDefaultErrorHandler($myErrorHandler);
 $errorMiddleware->setErrorHandler(HttpNotFoundException::class, new ApiNotFoundHandler($ampersandApp, $api->getResponseFactory(), $logger));
-
-// Position Middleware\RoutingMiddleware here, just before calling run(),
-// to have route information available in other middleware
-$api->addRoutingMiddleware();
 
 $api->run();
