@@ -5,7 +5,7 @@ namespace Ampersand\API\Middleware;
 use Ampersand\Exception\BadRequestException;
 use JsonException;
 
-class JsonRequestParserMiddleware
+class JsonRequestParser
 {
     public function __invoke($input)
     {

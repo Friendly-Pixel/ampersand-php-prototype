@@ -4,7 +4,7 @@ use Ampersand\AmpersandApp;
 use Ampersand\API\ErrorHandler\ApiNotFoundHandler;
 use Ampersand\API\ErrorHandler\GenericErrorHandler;
 use Ampersand\API\Middleware\InitAmpersandAppMiddleware;
-use Ampersand\API\Middleware\JsonRequestParserMiddleware;
+use Ampersand\API\Middleware\JsonRequestParser;
 use Ampersand\API\Middleware\LogPerformanceMiddleware;
 use Ampersand\API\Middleware\PostMaxSizeMiddleware;
 use Ampersand\Frontend\AngularJSApp;
@@ -177,7 +177,7 @@ $api
 
 // Body parsing middleware allows to work with JSON and XML body directly in request handling
 $api->addBodyParsingMiddleware(
-    [ 'application/json' => new JsonRequestParserMiddleware(), // overwrite default media type parser for application/json
+    [ 'application/json' => new JsonRequestParser(), // overwrite default media type parser for application/json
     ]
 );
 
