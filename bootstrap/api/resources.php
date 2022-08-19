@@ -3,29 +3,18 @@
 /** @phan-file-suppress PhanInvalidFQSENInCallable */
 
 use Ampersand\Controller\ResourceController;
+use Slim\Interfaces\RouteCollectorProxyInterface;
 
 /**
  * @var \Slim\Slim $api
  */
 global $api;
 
-/**************************************************************************************************
- *
- * resource calls WITHOUT interfaces
- *
- *************************************************************************************************/
-
-/**
- * @phan-closure-scope \Slim\App
- */
-$api->group('/resource', function () {
-    // Inside group closure, $this is bound to the instance of Slim\App
-    /** @var \Slim\App $this */
-
-    $this->get('', ResourceController::class . ':listResourceTypes');
-    $this->get('/{resourceType}', ResourceController::class . ':getAllResourcesForType');
-    $this->post('/{resourceType}', ResourceController::class . ':createNewResourceId');
-    $this->get('/{resourceType}/{resourceId}[/{resourcePath:.*}]', ResourceController::class . ':getResource');
-    $this->map(['PUT', 'PATCH', 'POST'], '/{resourceType}/{resourceId}[/{ifcPath:.*}]', ResourceController::class . ':putPatchPostResource');
-    $this->delete('/{resourceType}/{resourceId}[/{ifcPath:.*}]', ResourceController::class . ':deleteResource');
+$api->group('/resource', function (RouteCollectorProxyInterface $group) {
+    $group->get('', ResourceController::class . ':listResourceTypes');
+    $group->get('/{resourceType}', ResourceController::class . ':getAllResourcesForType');
+    $group->post('/{resourceType}', ResourceController::class . ':createNewResourceId');
+    $group->get('/{resourceType}/{resourceId}[/{resourcePath:.*}]', ResourceController::class . ':getResource');
+    $group->map(['PUT', 'PATCH', 'POST'], '/{resourceType}/{resourceId}[/{ifcPath:.*}]', ResourceController::class . ':putPatchPostResource');
+    $group->delete('/{resourceType}/{resourceId}[/{ifcPath:.*}]', ResourceController::class . ':deleteResource');
 });

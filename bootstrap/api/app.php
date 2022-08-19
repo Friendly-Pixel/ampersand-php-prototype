@@ -3,20 +3,15 @@
 /** @phan-file-suppress PhanInvalidFQSENInCallable */
 
 use Ampersand\Controller\SessionController;
+use Slim\Interfaces\RouteCollectorProxyInterface;
 
 /**
  * @var \Slim\Slim $api
  */
 global $api;
 
-/**
- * @phan-closure-scope \Slim\App
- */
-$api->group('/app', function () {
-    // Inside group closure, $this is bound to the instance of Slim\App
-    /** @var \Slim\App $this */
-
-    $this->patch('/roles', SessionController::class . ':updateRoles');
-    $this->get('/navbar', SessionController::class . ':getNavMenu');
-    $this->get('/notifications', SessionController::class . ':getNotifications');
+$api->group('/app', function (RouteCollectorProxyInterface $group) {
+    $group->patch('/roles', SessionController::class . ':updateRoles');
+    $group->get('/navbar', SessionController::class . ':getNavMenu');
+    $group->get('/notifications', SessionController::class . ':getNotifications');
 });
