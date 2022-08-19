@@ -1,6 +1,6 @@
 <?php
 
-/** @phan-file-suppress PhanInvalidFQSENInCallable */
+/** @phan-file-suppress PhanStaticCallToNonStatic */
 
 use Ampersand\Controller\FileObjectController;
 use Slim\Interfaces\RouteCollectorProxyInterface;
@@ -11,5 +11,5 @@ use Slim\Interfaces\RouteCollectorProxyInterface;
 global $api;
 
 $api->group('/file', function (RouteCollectorProxyInterface $group) {
-    $group->get('/{filePath:.*}', FileObjectController::class . ':getFile');
+    $group->get('/{filePath:.*}', [FileObjectController::class, 'getFile']);
 });
