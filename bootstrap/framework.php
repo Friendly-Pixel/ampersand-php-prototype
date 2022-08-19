@@ -1,7 +1,6 @@
 <?php
 
 use Ampersand\AmpersandApp;
-use Ampersand\API\ErrorHandler\ApiNotFoundHandler;
 use Ampersand\API\ErrorHandler\GenericErrorHandler;
 use Ampersand\API\Middleware\InitAmpersandAppMiddleware;
 use Ampersand\API\Middleware\JsonRequestParser;
@@ -18,7 +17,6 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Slim\Factory\AppFactory;
 use DI\Container;
-use Slim\Exception\HttpNotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use function Ampersand\Misc\stackTrace;
@@ -197,6 +195,5 @@ $errorMiddleware = $api->addErrorMiddleware(
 );
 $myErrorHandler = new GenericErrorHandler($ampersandApp, $api->getResponseFactory(), $logger);
 $errorMiddleware->setDefaultErrorHandler($myErrorHandler);
-$errorMiddleware->setErrorHandler(HttpNotFoundException::class, new ApiNotFoundHandler($ampersandApp, $api->getResponseFactory(), $logger));
 
 $api->run();

@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Slim\Exception\HttpSpecializedException;
 use Slim\Interfaces\ErrorHandlerInterface;
 use Throwable;
 
@@ -44,6 +45,10 @@ class GenericErrorHandler implements ErrorHandlerInterface
             return $this->exception->getHttpCode($this->app);
         }
 
+        if ($this->exception instanceof HttpSpecializedException) {
+            return $this->exception->getCode();
+        }
+
         return 500;
     }
 
@@ -53,26 +58,27 @@ class GenericErrorHandler implements ErrorHandlerInterface
             return $this->exception->getHttpMessage($this->app);
         }
 
+        if ($this->exception instanceof HttpSpecializedException) {
+            return $this->exception->getDescription();
+        }
+
         return $this->exception->getMessage();
     }
 
     protected function getUserMessage(): string
     {
-        // If displayErrorDetails is set to true, the user may see the full details of the exception message
-        if ($this->displayErrorDetails) {
-            return $this->getMessage();
-        }
-
-        // If http code is defined AND not an internal server error, the user may see the full details
-        // e.g. a 400 Bad Request exception can contain information for the user about what is wrong with the request
-        if ($this->exception instanceof HttpExceptionInterface
-            && $this->exception->getHttpCode($this->app) < 500
-        ) {
-            return $this->getMessage();
-        }
-
-        // Else, hide exception message from user
-        return "An error occured. For more information see server log files";
+        return match (true) {
+            // If displayErrorDetails is set to true, the user may see the full details of the exception message
+            $this->displayErrorDetails => $this->getMessage(),
+            // If http code is defined AND not an internal server error, the user may see the full details
+            // e.g. a 400 Bad Request exception can contain information for the user about what is wrong with the request
+            $this->exception instanceof HttpExceptionInterface
+                && $this->exception->getHttpCode($this->app) < 500 => $this->getMessage(),
+            // Slim API framework http exceptions
+            $this->exception instanceof HttpSpecializedException => $this->getMessage(),
+            // Hide exception message from user
+            default => "An error occured. For more information see server log files",
+        }; 
     }
 
     protected function getContextData(): array
