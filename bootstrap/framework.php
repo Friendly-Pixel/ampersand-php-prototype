@@ -147,7 +147,9 @@ $apiContainer = new Container();
 $apiContainer->set('ampersand_app', $ampersandApp); // add AmpersandApp object to API DI-container
 
 // Create and configure Slim app (version 4.x)
-$api = AppFactory::create();
+$api = AppFactory::create(
+    container: $apiContainer
+);
 $api->setBasePath('/api/v1');
 
 foreach (glob(__DIR__ . '/api/*.php') as $filepath) {
