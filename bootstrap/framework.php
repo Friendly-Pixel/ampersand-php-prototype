@@ -32,6 +32,7 @@ set_exception_handler(function (Throwable $exception) {
     $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
     http_response_code(500);
     header("{$protocol} 500 Internal server error");
+    header("Content-Type: application/json");
     print json_encode([
         'error' => 500,
         'msg' => $debugMode ? $exception->getMessage() : "An error occurred",
@@ -47,6 +48,7 @@ register_shutdown_function(function () {
         $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
         http_response_code(500);
         header("{$protocol} 500 Internal server error");
+        header("Content-Type: application/json");
         print json_encode(['error' => 500
                           ,'msg' => "An error occurred"
                           ,'html' => $debugMode ? $error['message'] : "See log for more information"
