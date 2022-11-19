@@ -9,6 +9,7 @@ use Ampersand\API\Middleware\PostMaxSizeMiddleware;
 use Ampersand\Frontend\AngularJSApp;
 use Ampersand\Log\Logger;
 use Ampersand\Misc\Settings;
+use Ampersand\Misc\Shutter;
 use Ampersand\Model;
 use Ampersand\Plugs\MysqlConjunctCache\MysqlConjunctCache;
 use Ampersand\Plugs\MysqlDB\MysqlDB;
@@ -19,45 +20,9 @@ use Slim\Factory\AppFactory;
 use DI\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-use function Ampersand\Misc\stackTrace;
-
-// Please be aware that this only captures uncaught exceptions that would otherwise terminate your application.
-// It does not run for every exception that is raised in the application if they are caught.
-// This is unlike the error handler which will execute for every triggered error (but errors aren't caught).
-set_exception_handler(function (Throwable $exception) {
-    Logger::getLogger('APPLICATION')->critical("Uncaught exception/error: '{$exception->getMessage()}' Stacktrace: {$exception->getTraceAsString()}");
-
-    global $debugMode; // $debugMode is set below after loading setting files
-
-    $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
-    http_response_code(500);
-    header("{$protocol} 500 Internal server error");
-    header("Content-Type: application/json");
-    print json_encode([
-        'error' => 500,
-        'msg' => $debugMode ? $exception->getMessage() : "An error occurred",
-        'html' => $debugMode ? stackTrace($exception) : "See log for more information"
-    ]);
-});
-
-register_shutdown_function(function () {
-    $error = error_get_last();
-    if (isset($error) && ($error['type'] & (E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR))) {
-        global $debugMode; // $debugMode is set below after loading setting files
-
-        $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
-        http_response_code(500);
-        header("{$protocol} 500 Internal server error");
-        header("Content-Type: application/json");
-        print json_encode(['error' => 500
-                          ,'msg' => "An error occurred"
-                          ,'html' => $debugMode ? $error['message'] : "See log for more information"
-                          ]);
-        
-        Logger::getLogger('APPLICATION')->critical($error['message']);
-        exit;
-    }
-});
+$shutter = new Shutter();
+set_exception_handler($shutter->handleUncaughtException(...));
+register_shutdown_function($shutter->shutdown(...));
 
 $scriptStartTime = (float) microtime(true);
 
