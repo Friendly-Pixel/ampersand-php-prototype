@@ -16,6 +16,11 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
+    "paths": {
+      "prototype-components": [
+        "dist/prototype-components"
+      ]
+    },
     "target": "es2020",
     "module": "es2020",
     "lib": [
