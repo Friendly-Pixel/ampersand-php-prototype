@@ -1,4 +1,4 @@
 # note! also update .dockerignore
-lib/
-app/lib/
+backend/lib/
+frontend-old/app/lib/
 node_modules/
